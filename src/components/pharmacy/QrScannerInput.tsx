@@ -6,8 +6,7 @@ import {
   Camera,
   Keyboard,
   Sparkles,
-  HelpCircle,
-  X,
+  AlertCircle,
 } from 'lucide-react';
 import { Html5QrcodeScanner } from 'html5-qrcode';
 import { DEMO_DOCTOR } from '../../lib/demo-data';
@@ -25,6 +24,7 @@ export default function QrScannerInput({
 }: QrScannerInputProps) {
   const [manualInput, setManualInput] = useState<string>('');
   const [isCameraActive, setIsCameraActive] = useState<boolean>(false);
+  const [cameraError, setCameraError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Auto focus input on mount for USB barcode scanner guns
@@ -34,7 +34,23 @@ export default function QrScannerInput({
 
   // Handle camera scanner lifecycle
   useEffect(() => {
-    if (!isCameraActive) return;
+    if (!isCameraActive) {
+      setCameraError(null);
+      return;
+    }
+
+    // Check if camera API is supported in current context
+    if (
+      typeof window !== 'undefined' &&
+      !window.isSecureContext &&
+      window.location.hostname !== 'localhost' &&
+      window.location.hostname !== '127.0.0.1'
+    ) {
+      setCameraError(
+        'Kamera web dibatasi browser pada koneksi HTTP (non-HTTPS). Gunakan USB Barcode Gun, tombol "Simulasi Scan", atau tempel link URL resep secara langsung.'
+      );
+      return;
+    }
 
     let scanner: Html5QrcodeScanner | null = null;
     try {
@@ -59,11 +75,12 @@ export default function QrScannerInput({
           }
         },
         (error) => {
-          // scanning frame errors can be ignored
+          // ignore transient frame scanning errors
         }
       );
     } catch (err) {
       console.error('Failed to init camera scanner:', err);
+      setCameraError('Gagal mengakses kamera web perangkat.');
     }
 
     return () => {
@@ -170,12 +187,24 @@ export default function QrScannerInput({
       {/* Camera scanner reader element */}
       {isCameraActive && (
         <div className="rounded-2xl border border-teal-200 bg-slate-900/5 p-4 text-center">
-          <div className="mx-auto max-w-sm overflow-hidden rounded-xl bg-white shadow-md">
-            <div id="html5-qrcode-reader" className="w-full" />
-          </div>
-          <p className="mt-2 text-xs text-slate-500">
-            Posisikan QR Code di depan kamera hingga terbaca
-          </p>
+          {cameraError ? (
+            <div className="flex items-start gap-2.5 rounded-xl bg-amber-50 border border-amber-200 p-3 text-xs text-amber-900 text-left">
+              <AlertCircle className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
+              <div>
+                <p className="font-semibold">Pemberitahuan Kamera:</p>
+                <p className="mt-0.5">{cameraError}</p>
+              </div>
+            </div>
+          ) : (
+            <>
+              <div className="mx-auto max-w-sm overflow-hidden rounded-xl bg-white shadow-md">
+                <div id="html5-qrcode-reader" className="w-full" />
+              </div>
+              <p className="mt-2 text-xs text-slate-500">
+                Posisikan QR Code di depan kamera hingga terbaca
+              </p>
+            </>
+          )}
         </div>
       )}
 

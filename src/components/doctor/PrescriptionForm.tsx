@@ -10,6 +10,7 @@ import {
   Key,
   Wifi,
   FileCheck2,
+  Smartphone,
 } from 'lucide-react';
 import type { PrescriptionPayload, PrescriptionItem, DoctorProfile } from '../../lib/types';
 import { DEMO_DOCTOR, DEMO_PRESCRIPTION_TEMPLATES } from '../../lib/demo-data';
@@ -48,10 +49,14 @@ export default function PrescriptionForm({
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [showKeyModal, setShowKeyModal] = useState<boolean>(false);
 
-  // Auto detect current origin in browser
+  // Set default baseUrl: prioritize LAN IP if on localhost
   useEffect(() => {
     if (!baseUrl && typeof window !== 'undefined') {
-      onBaseUrlChange(window.location.origin);
+      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        onBaseUrlChange(`http://192.168.1.7:${window.location.port || '3000'}`);
+      } else {
+        onBaseUrlChange(window.location.origin);
+      }
     }
   }, [baseUrl, onBaseUrlChange]);
 
@@ -179,36 +184,54 @@ export default function PrescriptionForm({
       </div>
 
       {/* Network / Mobile Host Setting Bar */}
-      <div className="flex flex-col gap-2 rounded-xl border border-slate-200 bg-white p-3.5 shadow-sm text-xs">
-        <div className="flex items-center justify-between font-semibold text-slate-700">
-          <span className="flex items-center gap-1.5 text-teal-700">
-            <Wifi className="h-4 w-4" /> Alamat Host QR (Untuk Test Scan via HP)
+      <div className="flex flex-col gap-2.5 rounded-2xl border border-teal-200 bg-teal-50/30 p-4 shadow-sm text-xs">
+        <div className="flex items-center justify-between font-semibold text-slate-800">
+          <span className="flex items-center gap-1.5 text-teal-700 font-bold">
+            <Wifi className="h-4 w-4" /> Alamat Host QR (Target Scan Kamera HP)
           </span>
-          <span className="text-[11px] font-normal text-slate-400">
-            Kamera HP akan membuka URL ini
+          <span className="text-[11px] font-normal text-slate-500">
+            Kamera HP akan membuka URL ini saat memindai QR
           </span>
         </div>
-        <div className="flex gap-2">
+
+        <div className="flex flex-col sm:flex-row gap-2">
           <input
             type="text"
             value={baseUrl}
             onChange={(e) => onBaseUrlChange(e.target.value)}
-            placeholder="http://192.168.x.x:3000 atau https://domain.com"
-            className="flex-1 rounded-lg border border-slate-200 px-3 py-1.5 text-slate-700 font-mono text-xs focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
+            placeholder="http://192.168.1.7:3000"
+            className="flex-1 rounded-xl border border-slate-200 bg-white px-3 py-2 text-slate-800 font-mono text-xs focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
           />
-          <button
-            type="button"
-            onClick={() => {
-              if (typeof window !== 'undefined') onBaseUrlChange(window.location.origin);
-            }}
-            className="rounded-lg bg-slate-100 px-2.5 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-200"
-          >
-            Reset Asal
-          </button>
+          <div className="flex gap-1.5">
+            <button
+              type="button"
+              onClick={() => onBaseUrlChange('http://192.168.1.7:3000')}
+              className="flex items-center gap-1 rounded-xl bg-teal-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-teal-700 shadow-xs"
+              title="Gunakan IP Wi-Fi Laptop agar bisa discan dari HP"
+            >
+              <Smartphone className="h-3.5 w-3.5" />
+              Pakai IP Wi-Fi
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                if (typeof window !== 'undefined') onBaseUrlChange(window.location.origin);
+              }}
+              className="rounded-xl border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-50"
+            >
+              Localhost
+            </button>
+          </div>
         </div>
+
+        {baseUrl.includes('localhost') && (
+          <p className="text-[11px] text-amber-700 bg-amber-50 rounded-lg p-2 border border-amber-200">
+            ⚠️ <strong>Perhatian:</strong> Jika memakai <em>localhost</em>, kamera HP tidak akan bisa membukanya. Klik tombol <strong>&quot;Pakai IP Wi-Fi&quot;</strong> agar HP Anda bisa langsung scan.
+          </p>
+        )}
       </div>
 
-      {/* Key Details Expandable Modal / Drawer */}
+      {/* Key Details Expandable Modal */}
       {showKeyModal && (
         <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-xs space-y-2">
           <div className="flex items-center justify-between font-semibold text-slate-800">
@@ -300,7 +323,7 @@ export default function PrescriptionForm({
           {/* Quick Prescription Templates */}
           <div className="flex flex-wrap items-center gap-1.5">
             <span className="text-xs text-slate-400 flex items-center gap-1">
-              <Sparkles className="h-3 w-3 text-amber-500" /> Template Cepat:
+              <Sparkles className="h-3 w-3 text-amber-500" /> Template:
             </span>
             {DEMO_PRESCRIPTION_TEMPLATES.map((tmpl, idx) => (
               <button

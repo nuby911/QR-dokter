@@ -16,8 +16,15 @@ export default function DoctorPage() {
   useEffect(() => {
     // Generate initial sample prescription so preview is ready immediately
     const initDemo = async () => {
-      const origin = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000';
-      setBaseUrl(origin);
+      let initialHost = 'http://192.168.1.7:3000';
+      if (typeof window !== 'undefined') {
+        if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+          initialHost = window.location.origin;
+        } else {
+          initialHost = `http://192.168.1.7:${window.location.port || '3000'}`;
+        }
+      }
+      setBaseUrl(initialHost);
 
       const rawPayload = {
         v: 1,

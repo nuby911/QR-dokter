@@ -15,34 +15,96 @@ export function encodePrescriptionToUrl(
 }
 
 /**
- * Decodes and parses a prescription payload from a URL hash string.
- * Example hashString: "#d=..." or "d=..."
+ * Decodes and parses a prescription payload from a URL string, hash string, or query string.
+ * Supports:
+ * - "http://192.168.1.7:3000/view#d=..."
+ * - "http://192.168.1.7:3000/view?d=..."
+ * - "#d=..."
+ * - "?d=..."
+ * - "d=..."
+ * - Raw encoded string
  */
 export function decodePrescriptionFromUrlHash(
-  hashString: string
+  inputString: string
 ): PrescriptionPayload | null {
   try {
-    if (!hashString) return null;
+    if (!inputString || typeof inputString !== 'string') return null;
 
-    let raw = hashString.startsWith('#') ? hashString.slice(1) : hashString;
-    if (!raw) return null;
+    let target = inputString.trim();
 
+    // 1. If it's a full URL, extract the relevant hash or search component
+    if (target.includes('#')) {
+      target = target.substring(target.indexOf('#') + 1);
+    } else if (target.includes('?')) {
+      target = target.substring(target.indexOf('?') + 1);
+    }
+
+    if (target.startsWith('#') || target.startsWith('?')) {
+      target = target.slice(1);
+    }
+
+    // 2. Extract the 'd' parameter value
     let encodedData = '';
-    if (raw.startsWith('d=')) {
-      encodedData = raw.slice(2);
+    if (target.startsWith('d=')) {
+      encodedData = target.slice(2);
     } else {
-      // Fallback: check query param style or direct compressed string
-      const match = raw.match(/(?:^|&)d=([^&]+)/);
+      const match = target.match(/(?:^|[&?])d=([^&]+)/);
       if (match) {
         encodedData = match[1];
       } else {
-        encodedData = raw;
+        encodedData = target;
       }
     }
 
     if (!encodedData) return null;
 
-    const decompressed = LZString.decompressFromEncodedURIComponent(encodedData);
+    // 3. Decompress with multiple fallback strategies to handle various mobile browsers:
+    // Some mobile browsers pre-decode URL components, others keep them encoded
+    let decompressed: string | null = null;
+
+    try {
+      decompressed = LZString.decompressFromEncodedURIComponent(encodedData);
+    } catch {
+      decompressed = null;
+    }
+
+    if (!decompressed) {
+      try {
+        decompressed = LZString.decompressFromEncodedURIComponent(
+          encodeURIComponent(encodedData)
+        );
+      } catch {
+        decompressed = null;
+      }
+    }
+
+    if (!decompressed) {
+      try {
+        decompressed = LZString.decompressFromEncodedURIComponent(
+          decodeURIComponent(encodedData)
+        );
+      } catch {
+        decompressed = null;
+      }
+    }
+
+    if (!decompressed) {
+      try {
+        decompressed = LZString.decompress(encodedData);
+      } catch {
+        decompressed = null;
+      }
+    }
+
+    // Direct JSON fallback in case plain text was provided
+    if (!decompressed && (encodedData.startsWith('{') || encodedData.startsWith('%7B'))) {
+      try {
+        decompressed = decodeURIComponent(encodedData);
+      } catch {
+        decompressed = encodedData;
+      }
+    }
+
     if (!decompressed) return null;
 
     const payload = JSON.parse(decompressed) as PrescriptionPayload;
@@ -61,7 +123,8 @@ export function decodePrescriptionFromUrlHash(
     }
 
     return payload;
-  } catch {
+  } catch (err) {
+    console.error('Error decoding prescription payload:', err);
     return null;
   }
 }

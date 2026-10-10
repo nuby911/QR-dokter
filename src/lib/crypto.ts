@@ -1,5 +1,14 @@
 import * as ed from '@noble/ed25519';
+import { sha512 } from '@noble/hashes/sha2.js';
+import { concatBytes } from '@noble/hashes/utils.js';
 import type { PrescriptionPayload } from './types';
+
+// Configure pure JavaScript SHA-512 fallback for @noble/ed25519
+// This guarantees Ed25519 cryptographic signing and verification ALWAYS work
+// on all devices, including mobile browsers on local network HTTP (where window.crypto.subtle is disabled)
+const computeSha512 = (...messages: Uint8Array[]): Uint8Array => sha512(concatBytes(...messages));
+ed.etc.sha512Sync = computeSha512;
+ed.etc.sha512Async = (...messages) => Promise.resolve(computeSha512(...messages));
 
 export function bytesToHex(bytes: Uint8Array): string {
   return Array.from(bytes)
@@ -76,7 +85,8 @@ export async function verifyPrescriptionSignature(
     const sigBytes = hexToBytes(sig);
     const pubBytes = hexToBytes(payload.doc.pk);
     return await ed.verifyAsync(sigBytes, msgBytes, pubBytes);
-  } catch {
+  } catch (err) {
+    console.error('Signature verification error:', err);
     return false;
   }
 }

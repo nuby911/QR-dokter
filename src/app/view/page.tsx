@@ -7,6 +7,7 @@ import {
   Sparkles,
   ArrowLeft,
   HeartPulse,
+  AlertTriangle,
 } from 'lucide-react';
 import type { PrescriptionPayload } from '../../lib/types';
 import { decodePrescriptionFromUrlHash, encodePrescriptionToUrl } from '../../lib/qr-codec';
@@ -20,14 +21,17 @@ export default function PatientViewPage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  const processHash = async (hashStr: string) => {
+  const processInput = async (inputStr: string) => {
     setLoading(true);
     setErrorMsg(null);
 
-    const decoded = decodePrescriptionFromUrlHash(hashStr);
+    const decoded = decodePrescriptionFromUrlHash(inputStr);
     if (!decoded) {
       setLoading(false);
       setPayload(null);
+      if (inputStr.trim().length > 5) {
+        setErrorMsg('Data resep dalam link tidak dapat diuraikan atau format tidak sesuai.');
+      }
       return;
     }
 
@@ -39,65 +43,85 @@ export default function PatientViewPage() {
       console.error('Error verifying signature:', err);
       setIsValidSignature(false);
       setPayload(decoded);
+      setErrorMsg('Gagal memverifikasi tanda tangan digital: ' + String(err));
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    const handleHashChange = () => {
-      const hash = typeof window !== 'undefined' ? window.location.hash : '';
-      if (hash) {
-        processHash(hash);
+    const handleUrlChange = () => {
+      if (typeof window === 'undefined') return;
+
+      // Check hash first (#d=...), then query string (?d=...), then full URL
+      const hash = window.location.hash;
+      const search = window.location.search;
+      const full = window.location.href;
+
+      if (hash && hash.length > 2) {
+        processInput(hash);
+      } else if (search && search.includes('d=')) {
+        processInput(search);
+      } else if (full && full.includes('d=')) {
+        processInput(full);
       } else {
         setLoading(false);
         setPayload(null);
       }
     };
 
-    handleHashChange();
+    handleUrlChange();
 
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    window.addEventListener('hashchange', handleUrlChange);
+    window.addEventListener('popstate', handleUrlChange);
+    return () => {
+      window.removeEventListener('hashchange', handleUrlChange);
+      window.removeEventListener('popstate', handleUrlChange);
+    };
   }, []);
 
   const handleLoadDemo = async () => {
-    const demoRaw = {
-      v: 1,
-      id: 'RX-20261010-DEMO',
-      doc: {
-        n: DEMO_DOCTOR.name,
-        sip: DEMO_DOCTOR.sip,
-        pk: DEMO_DOCTOR.publicKey,
-        faskes: DEMO_DOCTOR.faskes,
-      },
-      pat: {
-        n: 'Budi Santoso',
-        a: 32,
-        g: 'L' as const,
-        phone: '081298765432',
-      },
-      dt: new Date().toISOString().slice(0, 10),
-      rx: [
-        {
-          n: 'Paracetamol 500mg',
-          q: 10,
-          s: '3x1 tablet sesudah makan (bila demam)',
+    try {
+      const demoRaw = {
+        v: 1,
+        id: 'RX-20261010-DEMO',
+        doc: {
+          n: DEMO_DOCTOR.name,
+          sip: DEMO_DOCTOR.sip,
+          pk: DEMO_DOCTOR.publicKey,
+          faskes: DEMO_DOCTOR.faskes,
         },
-        {
-          n: 'Amoxicillin 500mg',
-          q: 15,
-          s: '3x1 kaplet sesudah makan (habiskan)',
+        pat: {
+          n: 'Budi Santoso',
+          a: 32,
+          g: 'L' as const,
+          phone: '081298765432',
         },
-      ],
-    };
+        dt: new Date().toISOString().slice(0, 10),
+        rx: [
+          {
+            n: 'Paracetamol 500mg',
+            q: 10,
+            s: '3x1 tablet sesudah makan (bila demam)',
+          },
+          {
+            n: 'Amoxicillin 500mg',
+            q: 15,
+            s: '3x1 kaplet sesudah makan (habiskan)',
+          },
+        ],
+      };
 
-    const sig = await signPrescription(demoRaw, DEMO_DOCTOR.privateKey);
-    const demoPayload = { ...demoRaw, sig };
+      const sig = await signPrescription(demoRaw, DEMO_DOCTOR.privateKey);
+      const demoPayload = { ...demoRaw, sig };
 
-    const url = encodePrescriptionToUrl(demoPayload);
-    const hash = url.substring(url.indexOf('#'));
-    window.location.hash = hash;
+      const url = encodePrescriptionToUrl(demoPayload);
+      const hash = url.substring(url.indexOf('#'));
+      window.location.hash = hash;
+      processInput(hash);
+    } catch (err) {
+      alert('Error saat memuat demo: ' + String(err));
+    }
   };
 
   return (
@@ -134,6 +158,16 @@ export default function PatientViewPage() {
 
       {/* Main Container */}
       <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
+        {errorMsg && (
+          <div className="mb-6 flex items-start gap-3 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-xs text-rose-800">
+            <AlertTriangle className="h-5 w-5 text-rose-600 shrink-0 mt-0.5" />
+            <div>
+              <p className="font-bold">Terjadi Kesalahan</p>
+              <p className="mt-0.5">{errorMsg}</p>
+            </div>
+          </div>
+        )}
+
         {loading ? (
           <div className="flex min-h-[360px] flex-col items-center justify-center text-center">
             <div className="h-10 w-10 animate-spin rounded-full border-4 border-teal-200 border-t-teal-600 mb-3" />
