@@ -176,38 +176,57 @@ export default function PrescriptionForm({
         </div>
 
         {/* QR Base URL Configuration */}
-        <div className="text-xs space-y-2">
-          <label className="block text-[#716358] font-bold text-xs">
-            Host QR Pasien (Untuk Pemindaian Kamera Ponsel)
-          </label>
+        <div className="text-xs space-y-2.5">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+            <label className="block text-[#716358] font-bold text-xs">
+              Alamat Web Penerjemah untuk Pasien (Host QR Target)
+            </label>
+            <span className="text-[10px] text-[#e86a28] font-semibold">
+              Dokter 100% Offline &bull; Pasien Buka via HP
+            </span>
+          </div>
+
           <div className="flex flex-col sm:flex-row gap-2">
             <input
               type="text"
               value={baseUrl}
               onChange={(e) => onBaseUrlChange(e.target.value)}
-              placeholder="http://192.168.1.7:3000"
+              placeholder="e.g. https://mediqr.app atau http://192.168.1.7:3000"
               className="flex-1 rounded-full border border-[#ebdccd] bg-[#fbfbf8] px-4 py-2 font-mono text-xs text-[#241a14] focus:border-[#e86a28] focus:bg-white focus:outline-none transition"
             />
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-1.5">
+              <button
+                type="button"
+                onClick={() => onBaseUrlChange('https://mediqr.app')}
+                className="rounded-full bg-[#e86a28] hover:bg-[#d95a18] px-3.5 py-1.5 text-xs font-semibold text-white transition shrink-0"
+                title="Gunakan alamat web publik agar pasien di mana saja bisa membuka resep dengan paket data HP-nya"
+              >
+                Cloud Publik
+              </button>
               <button
                 type="button"
                 onClick={() => onBaseUrlChange('http://192.168.1.7:3000')}
-                className="rounded-full bg-[#241a14] px-4 py-2 text-xs font-semibold text-white hover:bg-[#382b22] transition flex items-center gap-1.5 shrink-0"
+                className="rounded-full bg-[#241a14] px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-[#382b22] transition flex items-center gap-1 shrink-0"
+                title="Gunakan IP Wi-Fi lokal untuk pengujian satu jaringan"
               >
-                <Smartphone className="h-3.5 w-3.5 text-[#e86a28]" />
-                <span>Wi-Fi (192.168.1.7)</span>
+                <Smartphone className="h-3 w-3 text-[#e86a28]" />
+                <span>Wi-Fi Lokal</span>
               </button>
               <button
                 type="button"
                 onClick={() => {
                   if (typeof window !== 'undefined') onBaseUrlChange(window.location.origin);
                 }}
-                className="rounded-full border border-[#ebdccd] bg-white px-3.5 py-2 text-xs font-medium text-[#716358] hover:bg-[#f5ece1] hover:text-[#241a14] transition shrink-0"
+                className="rounded-full border border-[#ebdccd] bg-white px-3 py-1.5 text-xs font-medium text-[#716358] hover:bg-[#f5ece1] hover:text-[#241a14] transition shrink-0"
               >
                 Localhost
               </button>
             </div>
           </div>
+
+          <p className="text-[11px] text-[#716358] bg-[#fbfbf8] border border-[#ebdccd]/80 rounded-xl p-2.5 leading-relaxed">
+            <strong className="text-[#241a14]">Cara Kerja:</strong> Laptop dokter membuat QR secara <strong>100% offline</strong> tanpa internet. Ketika struk discan oleh pasien, HP pasien akan membuka tautan penerjemah di atas menggunakan koneksi internet ponselnya sendiri untuk menerjemahkan resep.
+          </p>
         </div>
 
         {/* Keys Details Drawer */}

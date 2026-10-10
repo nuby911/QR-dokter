@@ -17,7 +17,10 @@ export default function DoctorPage() {
     const initDemo = async () => {
       let initialHost = 'http://192.168.1.7:3000';
       if (typeof window !== 'undefined') {
-        if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+        const saved = localStorage.getItem('mediqr_viewer_host');
+        if (saved) {
+          initialHost = saved;
+        } else if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
           initialHost = window.location.origin;
         } else {
           initialHost = `http://192.168.1.7:${window.location.port || '3000'}`;
@@ -65,6 +68,9 @@ export default function DoctorPage() {
   const handlePrescriptionGenerated = (payload: PrescriptionPayload, url: string) => {
     setActivePrescription(payload);
     setBaseUrl(url);
+    if (typeof window !== 'undefined' && url) {
+      localStorage.setItem('mediqr_viewer_host', url);
+    }
   };
 
   return (
