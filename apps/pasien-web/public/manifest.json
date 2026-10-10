@@ -1,0 +1,41 @@
+{
+  "name": "MediQR Pasien — Portal Resep Digital",
+  "short_name": "MediQR Pasien",
+  "description": "Portal pasien untuk membaca dan memverifikasi lembar resep digital berbasis QR Code Ed25519",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#faf7f2",
+  "theme_color": "#e86a28",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["medical", "health"],
+  "shortcuts": [
+    {
+      "name": "Buka Resep",
+      "short_name": "Resep",
+      "description": "Buka lembar resep & kode QR apotek",
+      "url": "/view",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

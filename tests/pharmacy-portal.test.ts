@@ -5,11 +5,11 @@ import {
   recordDispenseTransaction,
   getDispenseHistory,
   resetToDemoData,
-} from '../src/lib/inventory-store';
-import { signPrescription, verifyPrescriptionSignature } from '../src/lib/crypto';
-import { encodePrescriptionToUrl, decodePrescriptionFromUrlHash } from '../src/lib/qr-codec';
-import { DEMO_DOCTOR } from '../src/lib/demo-data';
-import type { PrescriptionPayload } from '../src/lib/types';
+} from '../apps/apotek/src/lib/inventory-store';
+import { signPrescription, verifyPrescriptionSignature } from '../apps/pasien-web/src/lib/crypto';
+import { encodePrescriptionToUrl, decodePrescriptionFromUrlHash } from '../apps/pasien-web/src/lib/qr-codec';
+import { DEMO_DOCTOR } from '../apps/pasien-web/src/lib/demo-data';
+import type { PrescriptionPayload } from '../apps/pasien-web/src/lib/types';
 
 describe('Pharmacy Portal Dispense & Stock Deduction Workflow', () => {
   beforeEach(() => {

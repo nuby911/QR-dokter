@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { signPrescription, verifyPrescriptionSignature } from '../src/lib/crypto';
-import { encodePrescriptionToUrl, decodePrescriptionFromUrlHash } from '../src/lib/qr-codec';
-import { DEMO_DOCTOR } from '../src/lib/demo-data';
-import type { PrescriptionPayload } from '../src/lib/types';
+import { signPrescription, verifyPrescriptionSignature } from '../apps/pasien-web/src/lib/crypto';
+import { encodePrescriptionToUrl, decodePrescriptionFromUrlHash } from '../apps/pasien-web/src/lib/qr-codec';
+import { DEMO_DOCTOR } from '../apps/pasien-web/src/lib/demo-data';
+import type { PrescriptionPayload } from '../apps/pasien-web/src/lib/types';
 
 describe('Patient Web Viewer Logic', () => {
   it('correctly processes and validates a genuine prescription URL hash', async () => {

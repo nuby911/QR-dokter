@@ -4,11 +4,15 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:dokter": "npm --prefix apps/dokter run dev",
+    "dev:pasien": "npm --prefix apps/pasien-web run dev",
+    "dev:apotek": "npm --prefix apps/apotek run dev",
+    "app:dokter": "npm --prefix apps/dokter run app",
     "build": "next build",
     "start": "next start",
     "test": "vitest run",
     "app": "electron electron/main.js",
-    "desktop:doctor": "electron electron/main.js"
+    "desktop:doctor": "npm --prefix apps/dokter run app"
   },
   "dependencies": {
     "@noble/ed25519": "^2.2.3",

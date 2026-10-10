@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import QRCode from 'qrcode';
-import { signPrescription, verifyPrescriptionSignature } from '../src/lib/crypto';
-import { encodePrescriptionToUrl, decodePrescriptionFromUrlHash } from '../src/lib/qr-codec';
-import { DEMO_DOCTOR } from '../src/lib/demo-data';
-import type { PrescriptionPayload } from '../src/lib/types';
+import { signPrescription, verifyPrescriptionSignature } from '../apps/pasien-web/src/lib/crypto';
+import { encodePrescriptionToUrl, decodePrescriptionFromUrlHash } from '../apps/pasien-web/src/lib/qr-codec';
+import { DEMO_DOCTOR } from '../apps/pasien-web/src/lib/demo-data';
+import type { PrescriptionPayload } from '../apps/pasien-web/src/lib/types';
 
 describe('Doctor Portal Logic & Struk Generation', () => {
   it('generates a cryptographically signed prescription and verifies cleanly', async () => {

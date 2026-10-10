@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import fs from 'fs';
 import path from 'path';
-import { decodePrescriptionFromUrlHash, encodePrescriptionToUrl } from '../src/lib/qr-codec';
-import { signPrescription, verifyPrescriptionSignature } from '../src/lib/crypto';
-import { DEMO_DOCTOR } from '../src/lib/demo-data';
+import { decodePrescriptionFromUrlHash, encodePrescriptionToUrl } from '../apps/pasien-web/src/lib/qr-codec';
+import { signPrescription, verifyPrescriptionSignature } from '../apps/pasien-web/src/lib/crypto';
+import { DEMO_DOCTOR } from '../apps/pasien-web/src/lib/demo-data';
 
 describe('PWA & Offline Service Worker Configuration', () => {
   const publicDir = path.join(process.cwd(), 'public');

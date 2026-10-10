@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { CLINICAL_THEME, type PrescriptionPayload, type PharmacyItem } from '../src/lib/types';
+import { CLINICAL_THEME, type PrescriptionPayload, type PharmacyItem } from '../apps/pasien-web/src/lib/types';
 
 describe('Foundation & System Types', () => {
   it('defines the Clinical Teal theme tokens properly', () => {

@@ -6,8 +6,8 @@ import {
   getDispenseHistory,
   recordDispenseTransaction,
   resetToDemoData,
-} from '../src/lib/inventory-store';
-import { DEMO_DOCTOR, DEMO_INVENTORY } from '../src/lib/demo-data';
+} from '../apps/apotek/src/lib/inventory-store';
+import { DEMO_DOCTOR, DEMO_INVENTORY } from '../apps/pasien-web/src/lib/demo-data';
 
 describe('Pharmacy Inventory Store & Seed Data', () => {
   beforeEach(() => {

@@ -3,12 +3,12 @@ import {
   generateDoctorKeyPair,
   signPrescription,
   verifyPrescriptionSignature,
-} from '../src/lib/crypto';
+} from '../apps/pasien-web/src/lib/crypto';
 import {
   encodePrescriptionToUrl,
   decodePrescriptionFromUrlHash,
-} from '../src/lib/qr-codec';
-import type { PrescriptionPayload } from '../src/lib/types';
+} from '../apps/pasien-web/src/lib/qr-codec';
+import type { PrescriptionPayload } from '../apps/pasien-web/src/lib/types';
 
 describe('Cryptographic Engine & QR Codec', () => {
   it('generates a valid 32-byte Ed25519 keypair in hex', async () => {
