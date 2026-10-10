@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
-import { ArrowLeft, Building, Store, Pill } from 'lucide-react';
+import Navbar from '../../components/common/Navbar';
 import QrScannerInput from '../../components/pharmacy/QrScannerInput';
 import DispenseWorkspace from '../../components/pharmacy/DispenseWorkspace';
 import InventoryManager from '../../components/pharmacy/InventoryManager';
@@ -22,7 +21,6 @@ export default function PharmacyPage() {
     setErrorMessage(null);
 
     try {
-      // Extract hash or handle raw input
       let hash = rawInput;
       if (rawInput.includes('#')) {
         hash = rawInput.substring(rawInput.indexOf('#'));
@@ -52,59 +50,21 @@ export default function PharmacyPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fafaf9] text-ink-900 pb-24">
-      {/* Top Header Navigation */}
-      <header className="border-b border-ink-200/80 bg-white/95 backdrop-blur-md sticky top-0 z-20">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
-          <div className="flex items-center gap-3">
-            <Link
-              href="/"
-              className="flex items-center gap-1.5 rounded-lg border border-ink-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-ink-700 hover:bg-ink-100 transition shadow-xs"
-            >
-              <ArrowLeft className="h-3.5 w-3.5" />
-              <span>Kembali</span>
-            </Link>
-            <div className="h-4 w-px bg-ink-200" />
-            <div className="flex items-center gap-2.5">
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-forest-900 text-white shadow-xs">
-                <Store className="h-4 w-4 text-forest-300" />
-              </div>
-              <div>
-                <span className="font-bold text-ink-950 text-sm tracking-tight block">
-                  Kasir Farmasi &amp; Dispensing
-                </span>
-                <span className="text-[10px] text-ink-500 font-mono hidden sm:block">
-                  TERMINAL DISPENSING APOTEK v1.0
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1.5 rounded-full border border-forest-200 bg-forest-50 px-3 py-1 text-xs font-medium text-forest-800">
-              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="font-semibold">Apotek Mitra Sehat</span>
-              <span className="text-forest-600 font-mono text-[11px] hidden md:inline">• POS Ready</span>
-            </div>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-[#fbfbfb] text-neutral-900 pb-24">
+      <Navbar />
 
       {/* Main Container */}
-      <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 space-y-6">
-        {/* Title & Description banner */}
-        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 border-b border-ink-200/60 pb-4">
-          <div>
-            <div className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold uppercase tracking-wider text-forest-700 mb-1">
-              <span>● APOTEK WORKSTATION</span>
-            </div>
-            <h1 className="text-xl sm:text-2xl font-black text-ink-950 tracking-tight">
-              Pelayanan Tebus Resep &amp; Kasir Obat
-            </h1>
-            <p className="mt-0.5 text-xs text-ink-600">
-              Pindai QR struk pasien untuk verifikasi tanda tangan digital Ed25519 dan pemotongan stok otomatis di rak.
-            </p>
+      <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6 space-y-6">
+        <div className="border-b border-neutral-200 pb-6">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-neutral-400 mb-1">
+            Terminal Kasir Farmasi
           </div>
+          <h1 className="text-2xl font-bold tracking-tight text-neutral-900">
+            Pelayanan Tebus Resep &amp; Inventaris
+          </h1>
+          <p className="mt-1 text-xs text-neutral-600">
+            Pemindaian QR resep, pencocokan sediaan etalase, dan pemotongan stok otomatis.
+          </p>
         </div>
 
         {/* 1. Scanner Input Header Card */}
@@ -115,25 +75,23 @@ export default function PharmacyPage() {
 
         {/* Error Alert if any */}
         {errorMessage && (
-          <div className="rounded-xl border border-rose-200 bg-rose-50/90 p-4 text-xs font-medium text-rose-800 animate-in fade-in flex items-center gap-2">
-            <span className="font-bold">⚠️ Error Pemindaian:</span>
-            <span>{errorMessage}</span>
+          <div className="rounded-lg border border-red-200 bg-red-50 p-3.5 text-xs font-medium text-red-800">
+            {errorMessage}
           </div>
         )}
 
         {/* 2. Dispense Workspace (Active when prescription is scanned) */}
         {activePrescription && (
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <h2 className="text-sm font-bold text-ink-900 flex items-center gap-2 uppercase tracking-wide">
-                <Pill className="h-4 w-4 text-forest-700" />
-                Lembar Kerja Penebusan Resep Aktif
+          <div className="space-y-3 pt-2">
+            <div className="flex items-center justify-between border-b border-neutral-200 pb-2">
+              <h2 className="text-xs font-mono uppercase tracking-wider text-neutral-500">
+                Penebusan Resep Aktif
               </h2>
               <button
                 onClick={() => setActivePrescription(null)}
-                className="text-xs font-semibold text-ink-500 hover:text-ink-800 transition underline underline-offset-2"
+                className="text-xs text-neutral-500 hover:text-neutral-900 underline"
               >
-                Tutup Resep Ini
+                Tutup Lembar Ini
               </button>
             </div>
 
@@ -146,12 +104,9 @@ export default function PharmacyPage() {
         )}
 
         {/* 3. Pharmacy Stock & History Inventory Manager */}
-        <div className="space-y-3 pt-2">
-          <div className="flex items-center justify-between">
-            <h2 className="text-sm font-bold text-ink-900 flex items-center gap-2 uppercase tracking-wide">
-              <Building className="h-4 w-4 text-forest-700" />
-              Inventaris Fisik &amp; Riwayat Penebusan
-            </h2>
+        <div className="space-y-3 pt-4">
+          <div className="text-xs font-mono uppercase tracking-wider text-neutral-400">
+            Manajemen Stok &amp; Riwayat Penebusan
           </div>
 
           <InventoryManager key={inventoryRefreshKey} />

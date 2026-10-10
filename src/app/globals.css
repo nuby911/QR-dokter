@@ -1,53 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: #fafaf9; /* Warm off-white / Stone 50 */
-    --foreground: #09090b; /* Zinc 950 Deep Ink */
-    --surface: #ffffff;
-    --surface-subtle: #f4f4f5; /* Zinc 100 */
-    --border: #e4e4e7; /* Zinc 200 */
-    --primary: #064e3b; /* Emerald 900 Deep Forest */
-    --primary-accent: #059669; /* Emerald 600 */
+    --background: #fbfbfb;
+    --foreground: #111827;
   }
 
   body {
     background-color: var(--background);
     color: var(--foreground);
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11", "tnum";
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 }
 
-/* Authentic Serrated Paper Tear Edge (Top & Bottom of Thermal Receipts) */
-.receipt-tear-top {
-  background: radial-gradient(circle, transparent, transparent 4px, #ffffff 4px, #ffffff);
-  background-size: 12px 8px;
-  background-position: 0 0;
-  background-repeat: repeat-x;
-  height: 8px;
+/* Authentic Thermal Printer Paper Styles */
+.thermal-receipt {
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  background-color: #ffffff;
+  color: #000000;
+  border: 1px solid #e5e7eb;
 }
 
-.receipt-tear-bottom {
-  background: radial-gradient(circle, transparent, transparent 4px, #ffffff 4px, #ffffff);
-  background-size: 12px 8px;
-  background-position: 0 -4px;
-  background-repeat: repeat-x;
-  height: 8px;
-}
-
-/* Subtle Perforated Ticket Divider for Mobile Prescription Pass */
-.perforated-divider {
-  background-image: linear-gradient(to right, #d4d4d8 50%, rgba(255, 255, 255, 0) 0%);
-  background-position: bottom;
-  background-size: 12px 1.5px;
-  background-repeat: repeat-x;
-}
-
-/* Thermal printer print isolation */
+/* Print Isolation for 80mm ESC/POS Thermal Receipt */
 @media print {
   body * {
     visibility: hidden;

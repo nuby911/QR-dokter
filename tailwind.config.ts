@@ -36,15 +36,20 @@ const config: Config = {
         },
       },
       fontFamily: {
+        sans: [
+          'Plus Jakarta Sans',
+          '-apple-system',
+          'BlinkMacSystemFont',
+          'Segoe UI',
+          'Roboto',
+          'sans-serif',
+        ],
         mono: [
           'JetBrains Mono',
-          'Fira Code',
           'SFMono-Regular',
           'Menlo',
           'Monaco',
           'Consolas',
-          'Liberation Mono',
-          'Courier New',
           'monospace',
         ],
       },

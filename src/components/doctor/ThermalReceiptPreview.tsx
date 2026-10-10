@@ -43,11 +43,11 @@ export default function ThermalReceiptPreview({
 
   if (!payload) {
     return (
-      <div className="flex h-full min-h-[460px] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-ink-200 bg-white/50 p-8 text-center text-ink-400">
-        <Printer className="mb-3 h-10 w-10 text-ink-300" />
-        <p className="font-semibold text-ink-700 text-sm">Preview Struk Belum Tersedia</p>
-        <p className="mt-1 text-xs text-ink-400 max-w-xs">
-          Isi data resep lalu klik tombol &quot;Terbitkan &amp; Buat Struk QR&quot; untuk menghasilkan struk thermal kasir.
+      <div className="flex h-full min-h-[420px] flex-col items-center justify-center rounded-lg border border-dashed border-neutral-300 bg-white p-6 text-center text-neutral-400">
+        <Printer className="mb-2 h-8 w-8 text-neutral-300" />
+        <p className="font-semibold text-neutral-700 text-xs">Struk Belum Diterbitkan</p>
+        <p className="mt-1 text-[11px] text-neutral-400 max-w-xs">
+          Lengkapi data resep di sebelah kiri lalu klik &quot;Terbitkan &amp; Cetak Struk QR&quot;.
         </p>
       </div>
     );
@@ -68,15 +68,15 @@ export default function ThermalReceiptPreview({
   return (
     <div className="flex flex-col items-center">
       {/* Action Toolbar */}
-      <div className="no-print mb-4 flex w-full max-w-xs flex-wrap items-center justify-between gap-2 rounded-xl border border-ink-200 bg-white p-2.5 text-xs text-ink-700 shadow-2xs">
-        <span className="flex items-center gap-1.5 font-semibold text-forest-800 text-[11px]">
-          <ShieldCheck className="h-4 w-4 text-forest-700" />
-          Resep Sah
-        </span>
-        <div className="flex items-center gap-1.5">
+      <div className="no-print mb-3 flex w-full max-w-[320px] items-center justify-between rounded border border-neutral-200 bg-white p-2 text-xs">
+        <div className="flex items-center gap-1.5 text-neutral-700 text-[11px] font-mono">
+          <ShieldCheck className="h-3.5 w-3.5 text-emerald-700" />
+          <span>Ed25519 OK</span>
+        </div>
+        <div className="flex items-center gap-1">
           <button
             onClick={handleDownloadQr}
-            className="rounded-lg border border-ink-200 bg-white px-2 py-1 text-[11px] font-medium text-ink-700 hover:bg-ink-50 transition shadow-2xs"
+            className="rounded border border-neutral-200 bg-white px-2 py-1 text-[11px] text-neutral-700 hover:bg-neutral-50 transition"
             title="Download gambar QR Code"
           >
             <Download className="h-3 w-3 inline mr-1" />
@@ -86,7 +86,7 @@ export default function ThermalReceiptPreview({
             href={targetUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-lg border border-ink-200 bg-white px-2 py-1 text-[11px] font-medium text-ink-700 hover:bg-ink-50 transition shadow-2xs"
+            className="rounded border border-neutral-200 bg-white px-2 py-1 text-[11px] text-neutral-700 hover:bg-neutral-50 transition"
             title="Buka tampilan resep pasien di tab baru"
           >
             <ExternalLink className="h-3 w-3 inline mr-1" />
@@ -94,7 +94,7 @@ export default function ThermalReceiptPreview({
           </a>
           <button
             onClick={handlePrint}
-            className="flex items-center gap-1 rounded-lg bg-ink-900 px-2.5 py-1 text-[11px] font-semibold text-white shadow-2xs hover:bg-ink-800 transition"
+            className="flex items-center gap-1 rounded bg-neutral-900 px-2.5 py-1 text-[11px] font-semibold text-white hover:bg-neutral-800 transition"
           >
             <Printer className="h-3 w-3" />
             Cetak
@@ -102,90 +102,79 @@ export default function ThermalReceiptPreview({
         </div>
       </div>
 
-      {/* Authentic Thermal Receipt Paper Slip */}
+      {/* Authentic 80mm ESC/POS Thermal Receipt Paper Slip */}
       <div
-        className="thermal-receipt-print-area relative w-full max-w-[320px] bg-white shadow-md font-mono text-ink-900 overflow-hidden"
-        style={{ minWidth: '290px' }}
+        className="thermal-receipt-print-area w-full max-w-[320px] bg-white border border-neutral-200 p-5 font-mono text-neutral-950 text-xs shadow-sm"
+        style={{ minWidth: '280px' }}
       >
-        {/* Top Serrated Edge */}
-        <div className="receipt-tear-top no-print" />
+        {/* Clinic Header */}
+        <div className="border-b border-dashed border-neutral-300 pb-3 text-center space-y-0.5">
+          <h2 className="text-xs font-bold uppercase tracking-wider">
+            {payload.doc.faskes}
+          </h2>
+          <p className="text-[11px] font-semibold">{payload.doc.n}</p>
+          <p className="text-[9px] text-neutral-500">SIP: {payload.doc.sip}</p>
+        </div>
 
-        <div className="p-5 text-xs space-y-3">
-          {/* Clinic Header */}
-          <div className="border-b border-dashed border-ink-300 pb-3 text-center">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-ink-900">
-              {payload.doc.faskes}
-            </h2>
-            <p className="text-[11px] text-ink-700 font-semibold">{payload.doc.n}</p>
-            <p className="text-[9px] text-ink-500">{payload.doc.sip}</p>
+        {/* Demographics */}
+        <div className="border-b border-dashed border-neutral-300 py-2.5 text-[10px] space-y-1">
+          <div className="flex justify-between">
+            <span className="text-neutral-500">No. Resep:</span>
+            <span className="font-bold">{payload.id}</span>
           </div>
-
-          {/* Demographics */}
-          <div className="border-b border-dashed border-ink-300 pb-2.5 text-[10px] space-y-1">
-            <div className="flex justify-between">
-              <span className="text-ink-500">No. Resep:</span>
-              <span className="font-bold">{payload.id}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-ink-500">Tanggal:</span>
-              <span>{payload.dt}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-ink-500">Pasien:</span>
-              <span className="font-bold">{payload.pat.n} ({payload.pat.a} th / {payload.pat.g})</span>
-            </div>
+          <div className="flex justify-between">
+            <span className="text-neutral-500">Tanggal:</span>
+            <span>{payload.dt}</span>
           </div>
-
-          {/* Rx Orders List */}
-          <div className="border-b border-dashed border-ink-300 pb-3 text-[10px]">
-            <div className="mb-2 font-bold text-ink-900 tracking-wider text-[11px]">
-              R/ RESEP OBAT:
-            </div>
-            <div className="space-y-2.5">
-              {payload.rx.map((item, idx) => (
-                <div key={idx} className="leading-tight">
-                  <div className="flex justify-between font-bold">
-                    <span>{idx + 1}. {item.n}</span>
-                    <span>No. {item.q}</span>
-                  </div>
-                  <div className="pl-3 text-[9px] text-ink-600 italic mt-0.5">
-                    S. {item.s}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* High Contrast QR Code */}
-          <div className="py-2 text-center">
-            {qrDataUrl && (
-              <div className="inline-block p-1 bg-white border border-ink-300">
-                <img
-                  src={qrDataUrl}
-                  alt="QR Code Resep"
-                  className="mx-auto h-44 w-44 object-contain"
-                />
-              </div>
-            )}
-            <p className="mt-1.5 text-[9px] font-bold uppercase tracking-wider text-ink-900">
-              SCAN QR UNTUK TEBUS OBAT
-            </p>
-            <p className="text-[8px] text-ink-500">
-              Dapat ditebus di seluruh apotek mitra
-            </p>
-          </div>
-
-          {/* Digital Signature Audit Stamp */}
-          <div className="border-t border-dashed border-ink-300 pt-2 text-center text-[8px] text-ink-400">
-            <p>TERVERIFIKASI KRIPTOGRAFI ED25519</p>
-            <p className="truncate font-mono text-[7px] text-ink-300 mt-0.5">
-              SIG: {payload.sig.slice(0, 32)}...
-            </p>
+          <div className="flex justify-between">
+            <span className="text-neutral-500">Pasien:</span>
+            <span className="font-bold">{payload.pat.n} ({payload.pat.a} th / {payload.pat.g})</span>
           </div>
         </div>
 
-        {/* Bottom Serrated Edge */}
-        <div className="receipt-tear-bottom no-print" />
+        {/* Rx Orders List */}
+        <div className="border-b border-dashed border-neutral-300 py-3 text-[10px]">
+          <div className="font-bold uppercase tracking-wider text-neutral-400 mb-2">
+            R/ PRESKRIPSI
+          </div>
+          <div className="space-y-2.5">
+            {payload.rx.map((item, idx) => (
+              <div key={idx} className="space-y-0.5">
+                <div className="flex justify-between font-bold">
+                  <span>{idx + 1}. {item.n}</span>
+                  <span>No. {item.q}</span>
+                </div>
+                <div className="pl-3 text-[9px] text-neutral-600 italic">
+                  S. {item.s}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* High-Contrast QR Code */}
+        <div className="py-3 flex flex-col items-center text-center">
+          {qrDataUrl ? (
+            <img
+              src={qrDataUrl}
+              alt="QR Resep Dokter"
+              className="h-44 w-44 object-contain"
+            />
+          ) : (
+            <div className="h-44 w-44 bg-neutral-100 flex items-center justify-center text-[10px] text-neutral-400">
+              Membuat QR...
+            </div>
+          )}
+          <p className="mt-2 text-[9px] text-neutral-500 uppercase tracking-wider">
+            Pindai dengan kamera ponsel untuk membaca resep
+          </p>
+        </div>
+
+        {/* Cryptographic Signature Seal */}
+        <div className="border-t border-dashed border-neutral-300 pt-2 text-[8px] text-neutral-400 break-all space-y-0.5 text-center">
+          <p>ED25519 SIGNATURE SEAL:</p>
+          <p className="font-mono">{payload.sig.slice(0, 32)}...</p>
+        </div>
       </div>
     </div>
   );

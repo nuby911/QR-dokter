@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'MediQR — Sistem Resep Medis Cerdas & Inventaris Apotek',
-  description: 'Platform resep mandiri tanpa server pusat berbasis Self-Contained QR Code & manajemen stok apotek otomatis',
+  title: 'MediQR — Sistem E-Preskripsi Medis Desentralisasi',
+  description: 'Protokol resep mandiri berbasis QR Code kriptografi Ed25519 dan pemotongan inventaris apotek.',
 };
 
 export default function RootLayout({
@@ -13,7 +13,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="id">
-      <body className="min-h-screen text-slate-800 antialiased selection:bg-teal-500 selection:text-white">
+      <body className="min-h-screen antialiased text-neutral-900 bg-[#fbfbfb] selection:bg-neutral-900 selection:text-white">
         {children}
       </body>
     </html>
