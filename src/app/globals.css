@@ -2,22 +2,49 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 15, 23, 42;
-  --background-start-rgb: 248, 250, 252;
-  --background-end-rgb: 241, 245, 249;
+@layer base {
+  :root {
+    --background: #fafaf9; /* Warm off-white / Stone 50 */
+    --foreground: #09090b; /* Zinc 950 Deep Ink */
+    --surface: #ffffff;
+    --surface-subtle: #f4f4f5; /* Zinc 100 */
+    --border: #e4e4e7; /* Zinc 200 */
+    --primary: #064e3b; /* Emerald 900 Deep Forest */
+    --primary-accent: #059669; /* Emerald 600 */
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11", "tnum";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-  min-height: 100vh;
-  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+/* Authentic Serrated Paper Tear Edge (Top & Bottom of Thermal Receipts) */
+.receipt-tear-top {
+  background: radial-gradient(circle, transparent, transparent 4px, #ffffff 4px, #ffffff);
+  background-size: 12px 8px;
+  background-position: 0 0;
+  background-repeat: repeat-x;
+  height: 8px;
+}
+
+.receipt-tear-bottom {
+  background: radial-gradient(circle, transparent, transparent 4px, #ffffff 4px, #ffffff);
+  background-size: 12px 8px;
+  background-position: 0 -4px;
+  background-repeat: repeat-x;
+  height: 8px;
+}
+
+/* Subtle Perforated Ticket Divider for Mobile Prescription Pass */
+.perforated-divider {
+  background-image: linear-gradient(to right, #d4d4d8 50%, rgba(255, 255, 255, 0) 0%);
+  background-position: bottom;
+  background-size: 12px 1.5px;
+  background-repeat: repeat-x;
 }
 
 /* Thermal printer print isolation */

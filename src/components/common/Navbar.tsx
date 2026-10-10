@@ -4,10 +4,9 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  HeartPulse,
   Stethoscope,
   Store,
-  User,
+  Smartphone,
   ShieldCheck,
 } from 'lucide-react';
 
@@ -19,42 +18,42 @@ export default function Navbar() {
       href: '/doctor',
       label: 'Portal Dokter',
       icon: Stethoscope,
-      desc: 'Tulis Resep & Cetak QR',
+      sub: 'Tulis & Cetak Struk',
     },
     {
       href: '/view',
       label: 'Viewer Pasien',
-      icon: User,
-      desc: 'Buka di Ponsel / Kamera',
+      icon: Smartphone,
+      sub: 'Tampilan Resep HP',
     },
     {
       href: '/pharmacy',
-      label: 'Portal Apotek',
+      label: 'Kasir Apotek',
       icon: Store,
-      desc: 'Scan & Potong Stok',
+      sub: 'Scan & Kelola Stok',
     },
   ];
 
   return (
-    <header className="sticky top-0 z-30 border-b border-slate-200/80 bg-white/95 backdrop-blur-md">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
+    <header className="sticky top-0 z-40 border-b border-ink-200 bg-white/90 backdrop-blur-md">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
         {/* Brand */}
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-teal-600 text-white shadow-md shadow-teal-600/20 transition group-hover:scale-105">
-            <HeartPulse className="h-5 w-5" />
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-forest-950 text-white shadow-xs transition group-hover:bg-forest-900">
+            <span className="font-mono font-bold text-xs tracking-tighter">RX</span>
           </div>
-          <div>
-            <span className="font-extrabold text-slate-900 tracking-tight text-base sm:text-lg flex items-center gap-1.5">
-              MediQR <span className="text-teal-600 font-bold text-xs bg-teal-50 px-2 py-0.5 rounded-full border border-teal-100">Smart RX</span>
+          <div className="flex items-baseline gap-2">
+            <span className="font-bold text-ink-900 tracking-tight text-base sm:text-lg">
+              MediQR
             </span>
-            <span className="text-[10px] text-slate-400 block -mt-0.5 hidden sm:block">
-              Resep Medis Cerdas Berbasis Smart QR
+            <span className="text-[11px] font-medium text-ink-400 hidden sm:inline">
+              / Sistem Resep Medis Mandiri
             </span>
           </div>
         </Link>
 
         {/* Navigation Items */}
-        <nav className="flex items-center gap-1 sm:gap-2">
+        <nav className="flex items-center gap-1 sm:gap-1.5">
           {navLinks.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href;
@@ -62,23 +61,23 @@ export default function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-semibold transition ${
+                className={`flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-medium transition ${
                   isActive
-                    ? 'bg-teal-600 text-white shadow-xs'
-                    : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                    ? 'bg-ink-900 text-white shadow-xs'
+                    : 'text-ink-600 hover:bg-ink-100 hover:text-ink-900'
                 }`}
               >
-                <Icon className="h-4 w-4 shrink-0" />
+                <Icon className="h-3.5 w-3.5 shrink-0" />
                 <span className="hidden md:inline">{item.label}</span>
               </Link>
             );
           })}
         </nav>
 
-        {/* Security Badge */}
-        <div className="hidden lg:flex items-center gap-1.5 rounded-full bg-emerald-50 border border-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
-          <ShieldCheck className="h-3.5 w-3.5" />
-          <span>Ed25519 Secured</span>
+        {/* Clinical Security Pill */}
+        <div className="hidden lg:flex items-center gap-1.5 rounded-full border border-forest-200 bg-forest-50/70 px-2.5 py-1 text-[11px] font-semibold text-forest-800">
+          <ShieldCheck className="h-3.5 w-3.5 text-forest-700" />
+          <span>Ed25519 Signed</span>
         </div>
       </div>
     </header>

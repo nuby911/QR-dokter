@@ -158,17 +158,17 @@ export default function PrescriptionForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Doctor & Facility Bar */}
-      <div className="flex flex-col gap-3 rounded-2xl border border-teal-100 bg-gradient-to-r from-teal-50 to-emerald-50/40 p-4 text-slate-800 sm:flex-row sm:items-center sm:justify-between">
+    <form onSubmit={handleSubmit} className="space-y-5">
+      {/* Doctor & Clinic Badge */}
+      <div className="flex flex-col gap-3 rounded-xl border border-ink-200 bg-white p-4 text-ink-900 sm:flex-row sm:items-center sm:justify-between shadow-2xs">
         <div className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-teal-600 text-white shadow-sm">
-            <Stethoscope className="h-6 w-6" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-forest-950 text-white">
+            <Stethoscope className="h-5 w-5" />
           </div>
           <div>
-            <h3 className="font-bold text-slate-900">{doctor.name}</h3>
-            <p className="text-xs text-slate-500">
-              {doctor.sip} • <span className="font-medium text-teal-700">{doctor.faskes}</span>
+            <h3 className="font-bold text-sm text-ink-900">{doctor.name}</h3>
+            <p className="text-xs text-ink-500">
+              {doctor.sip} • <span className="font-semibold text-forest-800">{doctor.faskes}</span>
             </p>
           </div>
         </div>
@@ -176,21 +176,21 @@ export default function PrescriptionForm({
         <button
           type="button"
           onClick={() => setShowKeyModal(!showKeyModal)}
-          className="inline-flex items-center gap-1.5 self-start rounded-lg border border-teal-200 bg-white px-3 py-1.5 text-xs font-semibold text-teal-700 shadow-sm transition hover:bg-teal-50 sm:self-auto"
+          className="inline-flex items-center gap-1.5 self-start rounded-lg border border-ink-200 bg-white px-2.5 py-1 text-xs font-medium text-ink-700 shadow-2xs hover:bg-ink-50 transition sm:self-auto"
         >
-          <Key className="h-3.5 w-3.5 text-teal-600" />
+          <Key className="h-3 w-3 text-forest-700" />
           Kunci Ed25519
         </button>
       </div>
 
-      {/* Network / Mobile Host Setting Bar */}
-      <div className="flex flex-col gap-2.5 rounded-2xl border border-teal-200 bg-teal-50/30 p-4 shadow-sm text-xs">
-        <div className="flex items-center justify-between font-semibold text-slate-800">
-          <span className="flex items-center gap-1.5 text-teal-700 font-bold">
-            <Wifi className="h-4 w-4" /> Alamat Host QR (Target Scan Kamera HP)
+      {/* Target Host Setting for Mobile Scanning */}
+      <div className="flex flex-col gap-2 rounded-xl border border-ink-200 bg-white p-3.5 shadow-2xs text-xs">
+        <div className="flex items-center justify-between font-semibold text-ink-800">
+          <span className="flex items-center gap-1.5 text-forest-800">
+            <Wifi className="h-4 w-4 text-forest-700" /> Target Host QR (Untuk Scan HP Pasien)
           </span>
-          <span className="text-[11px] font-normal text-slate-500">
-            Kamera HP akan membuka URL ini saat memindai QR
+          <span className="text-[11px] font-normal text-ink-400">
+            URL yang dimuat ke dalam QR Code
           </span>
         </div>
 
@@ -200,24 +200,23 @@ export default function PrescriptionForm({
             value={baseUrl}
             onChange={(e) => onBaseUrlChange(e.target.value)}
             placeholder="http://192.168.1.7:3000"
-            className="flex-1 rounded-xl border border-slate-200 bg-white px-3 py-2 text-slate-800 font-mono text-xs focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
+            className="flex-1 rounded-lg border border-ink-200 bg-ink-50/40 px-3 py-1.5 text-ink-900 font-mono text-xs focus:border-forest-600 focus:bg-white focus:outline-none"
           />
           <div className="flex gap-1.5">
             <button
               type="button"
               onClick={() => onBaseUrlChange('http://192.168.1.7:3000')}
-              className="flex items-center gap-1 rounded-xl bg-teal-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-teal-700 shadow-xs"
-              title="Gunakan IP Wi-Fi Laptop agar bisa discan dari HP"
+              className="flex items-center gap-1 rounded-lg bg-forest-950 px-2.5 py-1.5 text-xs font-semibold text-white hover:bg-forest-900 transition shadow-2xs"
             >
-              <Smartphone className="h-3.5 w-3.5" />
-              Pakai IP Wi-Fi
+              <Smartphone className="h-3 w-3" />
+              IP Wi-Fi (192.168.1.7)
             </button>
             <button
               type="button"
               onClick={() => {
                 if (typeof window !== 'undefined') onBaseUrlChange(window.location.origin);
               }}
-              className="rounded-xl border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-50"
+              className="rounded-lg border border-ink-200 bg-white px-2.5 py-1.5 text-xs font-medium text-ink-600 hover:bg-ink-50"
             >
               Localhost
             </button>
@@ -225,34 +224,34 @@ export default function PrescriptionForm({
         </div>
 
         {baseUrl.includes('localhost') && (
-          <p className="text-[11px] text-amber-700 bg-amber-50 rounded-lg p-2 border border-amber-200">
-            ⚠️ <strong>Perhatian:</strong> Jika memakai <em>localhost</em>, kamera HP tidak akan bisa membukanya. Klik tombol <strong>&quot;Pakai IP Wi-Fi&quot;</strong> agar HP Anda bisa langsung scan.
+          <p className="text-[11px] text-amber-800 bg-amber-50 rounded-lg p-2 border border-amber-200">
+            ⚠️ <strong>Perhatian:</strong> Jika memakai <em>localhost</em>, kamera HP tidak akan bisa membukanya. Klik tombol <strong>&quot;IP Wi-Fi&quot;</strong> di samping agar HP bisa langsung scan.
           </p>
         )}
       </div>
 
-      {/* Key Details Expandable Modal */}
+      {/* Expandable Key Details Drawer */}
       {showKeyModal && (
-        <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-xs space-y-2">
-          <div className="flex items-center justify-between font-semibold text-slate-800">
+        <div className="rounded-xl border border-ink-200 bg-ink-50 p-4 text-xs space-y-2">
+          <div className="flex items-center justify-between font-semibold text-ink-800">
             <span>Kriptografi Asimetris Dokter (Ed25519)</span>
             <button
               type="button"
               onClick={handleGenerateKeys}
-              className="text-teal-600 hover:underline"
+              className="text-forest-700 hover:underline"
             >
               Generate Kunci Baru
             </button>
           </div>
           <div>
-            <span className="text-slate-500">Public Key (Verifikasi Apotek):</span>
-            <p className="font-mono text-[10px] text-slate-700 break-all bg-white p-1.5 rounded border border-slate-200">
+            <span className="text-ink-500">Public Key (Verifikasi Apotek):</span>
+            <p className="font-mono text-[10px] text-ink-800 break-all bg-white p-1.5 rounded border border-ink-200">
               {doctor.publicKey}
             </p>
           </div>
           <div>
-            <span className="text-slate-500">Private Key (Tersimpan Rahasia di Browser):</span>
-            <p className="font-mono text-[10px] text-slate-700 break-all bg-white p-1.5 rounded border border-slate-200">
+            <span className="text-ink-500">Private Key (Tersimpan Rahasia di Browser):</span>
+            <p className="font-mono text-[10px] text-ink-800 break-all bg-white p-1.5 rounded border border-ink-200">
               {doctor.privateKey.slice(0, 16)}... (Dilindungi)
             </p>
           </div>
@@ -260,15 +259,15 @@ export default function PrescriptionForm({
       )}
 
       {/* Patient Information Section */}
-      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm space-y-4">
-        <div className="flex items-center gap-2 border-b border-slate-100 pb-3 font-semibold text-slate-900">
-          <User className="h-4 w-4 text-teal-600" />
+      <div className="rounded-xl border border-ink-200 bg-white p-5 shadow-2xs space-y-4">
+        <div className="flex items-center gap-2 border-b border-ink-100 pb-3 font-semibold text-xs uppercase tracking-wider text-ink-500">
+          <User className="h-4 w-4 text-forest-700" />
           <span>Informasi Pasien</span>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
           <div className="sm:col-span-2">
-            <label className="block text-xs font-medium text-slate-600 mb-1">
+            <label className="block text-xs font-medium text-ink-600 mb-1">
               Nama Pasien
             </label>
             <input
@@ -276,13 +275,13 @@ export default function PrescriptionForm({
               required
               value={patientName}
               onChange={(e) => setPatientName(e.target.value)}
-              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-800 focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
+              className="w-full rounded-lg border border-ink-200 px-3 py-1.5 text-xs text-ink-900 focus:border-forest-600 focus:outline-none"
               placeholder="e.g. Budi Santoso"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">
+            <label className="block text-xs font-medium text-ink-600 mb-1">
               Usia (Tahun)
             </label>
             <input
@@ -292,18 +291,18 @@ export default function PrescriptionForm({
               required
               value={patientAge}
               onChange={(e) => setPatientAge(Number(e.target.value))}
-              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-800 focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
+              className="w-full rounded-lg border border-ink-200 px-3 py-1.5 text-xs text-ink-900 focus:border-forest-600 focus:outline-none"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">
+            <label className="block text-xs font-medium text-ink-600 mb-1">
               Jenis Kelamin
             </label>
             <select
               value={patientGender}
               onChange={(e) => setPatientGender(e.target.value as 'L' | 'P')}
-              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-800 focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
+              className="w-full rounded-lg border border-ink-200 px-3 py-1.5 text-xs text-ink-900 focus:border-forest-600 focus:outline-none"
             >
               <option value="L">Laki-laki (L)</option>
               <option value="P">Perempuan (P)</option>
@@ -312,25 +311,23 @@ export default function PrescriptionForm({
         </div>
       </div>
 
-      {/* Prescription Items Section */}
-      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm space-y-4">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between border-b border-slate-100 pb-3">
-          <div className="flex items-center gap-2 font-semibold text-slate-900">
-            <FileCheck2 className="h-4 w-4 text-teal-600" />
-            <span>Daftar Obat (R/)</span>
+      {/* Prescription Medications Section */}
+      <div className="rounded-xl border border-ink-200 bg-white p-5 shadow-2xs space-y-4">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between border-b border-ink-100 pb-3">
+          <div className="flex items-center gap-2 font-semibold text-xs uppercase tracking-wider text-ink-500">
+            <FileCheck2 className="h-4 w-4 text-forest-700" />
+            <span>Order Resep Obat (R/)</span>
           </div>
 
-          {/* Quick Prescription Templates */}
+          {/* Clean Quick Templates */}
           <div className="flex flex-wrap items-center gap-1.5">
-            <span className="text-xs text-slate-400 flex items-center gap-1">
-              <Sparkles className="h-3 w-3 text-amber-500" /> Template:
-            </span>
+            <span className="text-[11px] text-ink-400">Template:</span>
             {DEMO_PRESCRIPTION_TEMPLATES.map((tmpl, idx) => (
               <button
                 key={idx}
                 type="button"
                 onClick={() => handleApplyTemplate(idx)}
-                className="rounded-md bg-teal-50 px-2 py-1 text-[11px] font-medium text-teal-700 transition hover:bg-teal-100"
+                className="rounded-md border border-ink-200 bg-ink-50 px-2 py-0.5 text-[11px] font-medium text-ink-700 hover:bg-ink-100 transition"
               >
                 {tmpl.title}
               </button>
@@ -339,13 +336,13 @@ export default function PrescriptionForm({
         </div>
 
         {/* Drug Item Rows */}
-        <div className="space-y-3">
+        <div className="space-y-2.5">
           {items.map((item, index) => (
             <div
               key={index}
-              className="flex flex-col gap-2 rounded-xl border border-slate-100 bg-slate-50/70 p-3 sm:flex-row sm:items-center"
+              className="flex flex-col gap-2 rounded-lg border border-ink-200 bg-ink-50/40 p-2.5 sm:flex-row sm:items-center"
             >
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-teal-100 text-xs font-bold text-teal-800">
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-ink-200 text-[10px] font-mono font-bold text-ink-700">
                 {index + 1}
               </span>
 
@@ -356,19 +353,19 @@ export default function PrescriptionForm({
                   placeholder="Nama Obat & Kekuatan (misal: Paracetamol 500mg)"
                   value={item.n}
                   onChange={(e) => handleItemChange(index, 'n', e.target.value)}
-                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-800 focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
+                  className="w-full rounded-md border border-ink-200 bg-white px-2.5 py-1 text-xs font-semibold text-ink-900 focus:border-forest-600 focus:outline-none"
                 />
               </div>
 
-              <div className="w-24">
+              <div className="w-20">
                 <input
                   type="number"
                   min="1"
                   required
-                  placeholder="Jumlah"
+                  placeholder="Qty"
                   value={item.q}
                   onChange={(e) => handleItemChange(index, 'q', Number(e.target.value))}
-                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm text-slate-800 focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
+                  className="w-full rounded-md border border-ink-200 bg-white px-2.5 py-1 text-xs font-mono font-bold text-ink-900 text-center focus:border-forest-600 focus:outline-none"
                 />
               </div>
 
@@ -379,7 +376,7 @@ export default function PrescriptionForm({
                   placeholder="Aturan Pakai (misal: 3x1 tab sesudah makan)"
                   value={item.s}
                   onChange={(e) => handleItemChange(index, 's', e.target.value)}
-                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm text-slate-800 focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
+                  className="w-full rounded-md border border-ink-200 bg-white px-2.5 py-1 text-xs text-ink-800 focus:border-forest-600 focus:outline-none"
                 />
               </div>
 
@@ -387,10 +384,10 @@ export default function PrescriptionForm({
                 type="button"
                 onClick={() => handleRemoveItem(index)}
                 disabled={items.length <= 1}
-                className="self-end p-2 text-slate-400 hover:text-red-500 disabled:opacity-30 sm:self-auto"
+                className="p-1.5 text-ink-400 hover:text-rose-600 disabled:opacity-30 self-end sm:self-auto"
                 title="Hapus obat"
               >
-                <Trash2 className="h-4 w-4" />
+                <Trash2 className="h-3.5 w-3.5" />
               </button>
             </div>
           ))}
@@ -399,9 +396,9 @@ export default function PrescriptionForm({
         <button
           type="button"
           onClick={handleAddItem}
-          className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-teal-300 px-3.5 py-2 text-xs font-semibold text-teal-700 transition hover:bg-teal-50"
+          className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-ink-300 px-3 py-1.5 text-xs font-medium text-ink-700 hover:bg-ink-50 transition"
         >
-          <Plus className="h-4 w-4" /> Tambah Obat Lain
+          <Plus className="h-3.5 w-3.5" /> Tambah Obat Lain
         </button>
       </div>
 
@@ -409,9 +406,9 @@ export default function PrescriptionForm({
       <button
         type="submit"
         disabled={isGenerating}
-        className="flex w-full items-center justify-center gap-2 rounded-xl bg-teal-600 px-6 py-3.5 font-bold text-white shadow-md transition hover:bg-teal-700 active:scale-[0.99] disabled:opacity-60"
+        className="flex w-full items-center justify-center gap-2 rounded-xl bg-forest-950 py-3 text-xs font-bold text-white shadow-xs transition hover:bg-forest-900 active:scale-98 disabled:opacity-60"
       >
-        <FileCheck2 className="h-5 w-5" />
+        <FileCheck2 className="h-4 w-4" />
         {isGenerating ? 'Menandatangani Kriptografi...' : 'Terbitkan & Buat Struk QR'}
       </button>
     </form>

@@ -140,18 +140,18 @@ export default function QrScannerInput({
   };
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm space-y-4">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-teal-50 text-teal-600">
+    <div className="rounded-2xl border border-ink-200 bg-white p-5 shadow-xs space-y-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-forest-50 border border-forest-200/60 text-forest-800">
             <Scan className="h-5 w-5" />
           </div>
           <div>
-            <h3 className="font-bold text-slate-900 text-sm">
-              Pemindai QR Resep
+            <h3 className="font-bold text-ink-950 text-sm tracking-tight">
+              Pemindai QR Resep Masuk
             </h3>
-            <p className="text-[11px] text-slate-500">
-              Arahkan USB Barcode Gun, gunakan kamera, atau tempel link resep
+            <p className="text-[11px] text-ink-500">
+              Arahkan USB Barcode Gun ke kolom input, nyalakan kamera web, atau tempel link hash resep.
             </p>
           </div>
         </div>
@@ -161,10 +161,10 @@ export default function QrScannerInput({
           <button
             type="button"
             onClick={() => setIsCameraActive(!isCameraActive)}
-            className={`flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-semibold transition ${
+            className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition ${
               isCameraActive
-                ? 'border-teal-500 bg-teal-50 text-teal-700'
-                : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+                ? 'border-forest-600 bg-forest-50 text-forest-800'
+                : 'border-ink-200 bg-white text-ink-700 hover:bg-ink-100'
             }`}
           >
             <Camera className="h-3.5 w-3.5" />
@@ -175,20 +175,20 @@ export default function QrScannerInput({
             type="button"
             onClick={handleSimulateScan}
             disabled={isLoading}
-            className="flex items-center gap-1.5 rounded-xl bg-teal-50 border border-teal-200 px-3 py-1.5 text-xs font-bold text-teal-800 hover:bg-teal-100 transition shadow-xs"
-            title="Simulasikan scan resep contoh secara instan"
+            className="flex items-center gap-1.5 rounded-lg border border-forest-300 bg-forest-50/80 px-3 py-1.5 text-xs font-bold text-forest-800 hover:bg-forest-100 transition shadow-xs"
+            title="Simulasikan scan resep contoh secara instan untuk demo"
           >
-            <Sparkles className="h-3.5 w-3.5 text-teal-600" />
-            Simulasi Scan
+            <Sparkles className="h-3.5 w-3.5 text-forest-700" />
+            <span>Simulasi Scan Demo</span>
           </button>
         </div>
       </div>
 
       {/* Camera scanner reader element */}
       {isCameraActive && (
-        <div className="rounded-2xl border border-teal-200 bg-slate-900/5 p-4 text-center">
+        <div className="rounded-xl border border-ink-200 bg-ink-50/60 p-4 text-center">
           {cameraError ? (
-            <div className="flex items-start gap-2.5 rounded-xl bg-amber-50 border border-amber-200 p-3 text-xs text-amber-900 text-left">
+            <div className="flex items-start gap-2.5 rounded-lg bg-amber-50 border border-amber-200 p-3 text-xs text-amber-900 text-left">
               <AlertCircle className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
               <div>
                 <p className="font-semibold">Pemberitahuan Kamera:</p>
@@ -197,11 +197,11 @@ export default function QrScannerInput({
             </div>
           ) : (
             <>
-              <div className="mx-auto max-w-sm overflow-hidden rounded-xl bg-white shadow-md">
+              <div className="mx-auto max-w-sm overflow-hidden rounded-xl border border-ink-200 bg-white shadow-sm">
                 <div id="html5-qrcode-reader" className="w-full" />
               </div>
-              <p className="mt-2 text-xs text-slate-500">
-                Posisikan QR Code di depan kamera hingga terbaca
+              <p className="mt-2 text-xs text-ink-500 font-mono">
+                Posisikan QR Code di depan kamera hingga terfokus
               </p>
             </>
           )}
@@ -211,22 +211,25 @@ export default function QrScannerInput({
       {/* Manual input form for USB Barcode Scanner Gun or text paste */}
       <form onSubmit={handleManualSubmit} className="flex gap-2">
         <div className="relative flex-1">
-          <Keyboard className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+          <Keyboard className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-ink-400" />
           <input
             ref={inputRef}
             type="text"
             value={manualInput}
             onChange={(e) => setManualInput(e.target.value)}
-            placeholder="Arahkan Barcode Scanner Gun ke sini, atau tempel URL hash resep (Ctrl+V)..."
-            className="w-full rounded-xl border border-slate-200 bg-slate-50/50 py-2.5 pl-9 pr-3 text-xs text-slate-800 placeholder-slate-400 focus:border-teal-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-teal-500 font-mono"
+            placeholder="Arahkan Barcode Scanner Gun ke sini, atau tempel hash resep #d=..."
+            className="w-full rounded-xl border border-ink-200 bg-ink-50/50 py-2.5 pl-10 pr-20 text-xs text-ink-900 placeholder-ink-400 focus:border-forest-600 focus:bg-white focus:outline-none focus:ring-1 focus:ring-forest-600 font-mono"
           />
+          <span className="absolute right-3 top-1/2 -translate-y-1/2 rounded bg-ink-200/80 px-1.5 py-0.5 text-[10px] font-mono text-ink-600">
+            ↵ Enter
+          </span>
         </div>
         <button
           type="submit"
           disabled={!manualInput.trim() || isLoading}
-          className="rounded-xl bg-teal-600 px-5 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-teal-700 disabled:opacity-50"
+          className="rounded-xl bg-forest-900 px-5 py-2.5 text-xs font-bold text-white shadow-xs transition hover:bg-forest-800 disabled:opacity-50"
         >
-          Proses
+          {isLoading ? 'Memproses...' : 'Proses Resep'}
         </button>
       </form>
     </div>
