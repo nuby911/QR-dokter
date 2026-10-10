@@ -1,9 +1,9 @@
 import type { PharmacyItem, DispenseLog, PharmacyProfile } from './types';
 import { DEMO_INVENTORY } from './demo-data';
 
-const PHARMACY_PROFILE_KEY = 'mediqr_pharmacy_profile_v1';
-const INVENTORY_STORAGE_KEY = 'mediqr_pharmacy_inventory_v1';
-const DISPENSE_STORAGE_KEY = 'mediqr_dispense_history_v1';
+const PHARMACY_PROFILE_KEY = 'mediqr_pharmacy_profile_v2';
+const INVENTORY_STORAGE_KEY = 'mediqr_pharmacy_inventory_v2';
+const DISPENSE_STORAGE_KEY = 'mediqr_dispense_history_v2';
 
 // In-memory fallback for SSR and testing environments
 let memoryPharmacyProfile: PharmacyProfile | null = null;
@@ -14,7 +14,19 @@ function isBrowser(): boolean {
   return typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';
 }
 
+function cleanLegacyDummyData(): void {
+  if (!isBrowser()) return;
+  try {
+    window.localStorage.removeItem('mediqr_pharmacy_profile_v1');
+    window.localStorage.removeItem('mediqr_pharmacy_inventory_v1');
+    window.localStorage.removeItem('mediqr_dispense_history_v1');
+  } catch {
+    // ignore
+  }
+}
+
 export function getPharmacyProfile(): PharmacyProfile | null {
+  cleanLegacyDummyData();
   if (!isBrowser()) return memoryPharmacyProfile;
   try {
     const raw = window.localStorage.getItem(PHARMACY_PROFILE_KEY);
@@ -50,6 +62,7 @@ export function clearPharmacyProfile(): void {
 }
 
 function loadInventoryFromStorage(): PharmacyItem[] {
+  cleanLegacyDummyData();
   if (!isBrowser()) return memoryInventory;
   try {
     const raw = window.localStorage.getItem(INVENTORY_STORAGE_KEY);
@@ -57,7 +70,16 @@ function loadInventoryFromStorage(): PharmacyItem[] {
       // Clean default empty inventory
       return [];
     }
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    // Strictly exclude any historical demo items
+    const cleaned = parsed.filter(
+      (item) => !['inv-1', 'inv-2', 'inv-3', 'inv-4', 'inv-5'].includes(item.id)
+    );
+    if (cleaned.length !== parsed.length) {
+      window.localStorage.setItem(INVENTORY_STORAGE_KEY, JSON.stringify(cleaned));
+    }
+    return cleaned;
   } catch {
     return memoryInventory;
   }

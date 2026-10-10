@@ -9,7 +9,7 @@ import {
   Printer,
   Receipt,
 } from 'lucide-react';
-import type { PrescriptionPayload, PharmacyItem, DispenseLog } from '../../lib/types';
+import type { PrescriptionPayload, PharmacyItem, DispenseLog, PharmacyProfile } from '../../lib/types';
 import {
   getInventoryItems,
   deductItemStock,
@@ -21,6 +21,7 @@ interface DispenseWorkspaceProps {
   prescription: PrescriptionPayload;
   isValidSignature: boolean;
   onDispenseSuccess: () => void;
+  pharmacyProfile?: PharmacyProfile | null;
 }
 
 interface MappingRow {
@@ -35,6 +36,7 @@ export default function DispenseWorkspace({
   prescription,
   isValidSignature,
   onDispenseSuccess,
+  pharmacyProfile,
 }: DispenseWorkspaceProps) {
   const [inventoryList, setInventoryList] = useState<PharmacyItem[]>([]);
   const [mappingRows, setMappingRows] = useState<MappingRow[]>([]);
@@ -183,8 +185,8 @@ export default function DispenseWorkspace({
           {/* Struk Rincian Belanja Kasir */}
           <div className="mx-auto max-w-sm rounded-2xl border border-[#ebdccd] bg-[#fbfbf8] p-5 text-left text-xs font-mono text-[#241a14] space-y-3 shadow-inner">
             <div className="border-b border-dashed border-[#d5c3b1] pb-3 text-center space-y-0.5">
-              <h4 className="font-bold text-sm">APOTEK MITRA SEHAT</h4>
-              <p className="text-[10px] text-[#716358]">BUKTI PELAYANAN RESEP</p>
+              <h4 className="font-bold text-sm uppercase">{pharmacyProfile?.name || 'APOTEK MEDI-QR'}</h4>
+              <p className="text-[10px] text-[#716358]">{pharmacyProfile?.pharmacist ? `${pharmacyProfile.pharmacist} (SIA: ${pharmacyProfile.sia})` : 'BUKTI PELAYANAN RESEP'}</p>
               <p className="text-[10px] text-[#716358]">TRX: {completedLog.id}</p>
               <p className="text-[10px] text-[#716358]">{new Date(completedLog.timestamp).toLocaleString('id-ID')}</p>
             </div>
@@ -345,17 +347,23 @@ export default function DispenseWorkspace({
                     <div className="grid grid-cols-1 sm:grid-cols-12 gap-2 items-center">
                       {/* Inventory Dropdown Selector */}
                       <div className="sm:col-span-8">
-                        <select
-                          value={row.selectedInventoryId}
-                          onChange={(e) => handleRowChange(idx, 'selectedInventoryId', e.target.value)}
-                          className="w-full rounded-xl border border-[#ebdccd] bg-white px-3 py-2 text-xs text-[#241a14] focus:border-[#e86a28] focus:outline-none transition"
-                        >
-                          {inventoryList.map((inv) => (
-                            <option key={inv.id} value={inv.id}>
-                              {inv.name} &bull; Rp {inv.price.toLocaleString('id-ID')}/{inv.unit} (Sisa: {inv.currentStock})
-                            </option>
-                          ))}
-                        </select>
+                        {inventoryList.length === 0 ? (
+                          <div className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-[11px] text-amber-900 font-medium">
+                            Etalase kosong. Daftarkan obat di manajemen stok terlebih dahulu.
+                          </div>
+                        ) : (
+                          <select
+                            value={row.selectedInventoryId}
+                            onChange={(e) => handleRowChange(idx, 'selectedInventoryId', e.target.value)}
+                            className="w-full rounded-xl border border-[#ebdccd] bg-white px-3 py-2 text-xs text-[#241a14] focus:border-[#e86a28] focus:outline-none transition"
+                          >
+                            {inventoryList.map((inv) => (
+                              <option key={inv.id} value={inv.id}>
+                                {inv.name} &bull; Rp {inv.price.toLocaleString('id-ID')}/{inv.unit} (Sisa: {inv.currentStock})
+                              </option>
+                            ))}
+                          </select>
+                        )}
                       </div>
 
                       {/* Quantity Input */}

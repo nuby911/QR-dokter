@@ -4,13 +4,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import {
   Camera,
   Keyboard,
-  Play,
   AlertCircle,
 } from 'lucide-react';
 import { Html5QrcodeScanner } from 'html5-qrcode';
-import { DEMO_DOCTOR } from '../../lib/demo-data';
-import { signPrescription } from '../../lib/crypto';
-import { encodePrescriptionToUrl } from '../../lib/qr-codec';
 
 interface QrScannerInputProps {
   onScanResult: (rawString: string) => void;
@@ -99,43 +95,6 @@ export default function QrScannerInput({
     setManualInput('');
   };
 
-  const handleSimulateScan = async () => {
-    const rawDemo = {
-      v: 1,
-      id: `RX-DEMO-${Math.floor(1000 + Math.random() * 9000)}`,
-      doc: {
-        n: DEMO_DOCTOR.name,
-        sip: DEMO_DOCTOR.sip,
-        pk: DEMO_DOCTOR.publicKey,
-        faskes: DEMO_DOCTOR.faskes,
-      },
-      pat: {
-        n: 'Agus Salim',
-        a: 38,
-        g: 'L' as const,
-        phone: '081398765432',
-      },
-      dt: new Date().toISOString().slice(0, 10),
-      rx: [
-        {
-          n: 'Paracetamol 500mg',
-          q: 10,
-          s: '3x1 tablet sesudah makan',
-        },
-        {
-          n: 'Amoxicillin 500mg',
-          q: 10,
-          s: '3x1 kaplet sesudah makan (habiskan)',
-        },
-      ],
-    };
-
-    const sig = await signPrescription(rawDemo, DEMO_DOCTOR.privateKey);
-    const fullPayload = { ...rawDemo, sig };
-    const url = encodePrescriptionToUrl(fullPayload);
-    onScanResult(url);
-  };
-
   return (
     <div className="rounded-3xl border border-[#ebdccd] bg-white p-5 sm:p-6 shadow-sm space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
@@ -161,17 +120,6 @@ export default function QrScannerInput({
           >
             <Camera className="h-3.5 w-3.5 text-[#e86a28]" />
             <span>{isCameraActive ? 'Tutup Kamera' : 'Kamera Web'}</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={handleSimulateScan}
-            disabled={isLoading}
-            className="flex items-center gap-1.5 rounded-full border border-[#ebdccd] bg-[#fbfbf8] px-3.5 py-1.5 text-xs font-semibold text-[#241a14] hover:bg-[#f5ece1] transition"
-            title="Simulasikan scan resep contoh secara instan"
-          >
-            <Play className="h-3 w-3 text-[#e86a28]" />
-            <span>Simulasi Uji</span>
           </button>
         </div>
       </div>

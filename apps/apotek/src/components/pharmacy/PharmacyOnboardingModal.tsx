@@ -25,7 +25,6 @@ export default function PharmacyOnboardingModal({
   const [pharmacist, setPharmacist] = useState<string>(currentProfile?.pharmacist || '');
   const [address, setAddress] = useState<string>(currentProfile?.address || '');
   const [phone, setPhone] = useState<string>(currentProfile?.phone || '');
-  const [initOption, setInitOption] = useState<'empty' | 'demo'>('empty');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -52,13 +51,9 @@ export default function PharmacyOnboardingModal({
 
       savePharmacyProfile(profile);
 
-      // If mandatory first-run setup, initialize inventory based on selection
+      // Mandatory first-run setup always starts with clean empty inventory
       if (isMandatory) {
-        if (initOption === 'demo') {
-          seedDemoInventory();
-        } else {
-          clearInventory();
-        }
+        clearInventory();
       }
 
       onSaved(profile);
@@ -179,51 +174,15 @@ export default function PharmacyOnboardingModal({
             </div>
           </div>
 
-          {/* Initial Inventory Option (Only on mandatory setup) */}
+          {/* Initial Inventory Notice (Only on mandatory setup) */}
           {isMandatory && (
-            <div className="rounded-2xl border border-[#ebdccd] bg-[#faf7f2] p-4 space-y-2">
-              <label className="block text-[#241a14] font-bold text-xs">
-                Inisialisasi Master Obat Etalase:
-              </label>
-              <div className="space-y-2">
-                <label className="flex items-start gap-2.5 p-2.5 rounded-xl border border-[#ebdccd] bg-white cursor-pointer hover:bg-[#fbfbf8] transition">
-                  <input
-                    type="radio"
-                    name="initOption"
-                    value="empty"
-                    checked={initOption === 'empty'}
-                    onChange={() => setInitOption('empty')}
-                    className="mt-0.5 text-[#e86a28] focus:ring-[#e86a28]"
-                  />
-                  <div>
-                    <span className="font-bold text-[#241a14] block">
-                      Mulai dari Etalase Kosong (0 Obat) &bull; Direkomendasikan
-                    </span>
-                    <span className="text-[11px] text-[#716358]">
-                      Katalog bersih dari nol. Anda dapat memasukkan obat apotek Anda satu per satu.
-                    </span>
-                  </div>
-                </label>
-
-                <label className="flex items-start gap-2.5 p-2.5 rounded-xl border border-[#ebdccd] bg-white cursor-pointer hover:bg-[#fbfbf8] transition">
-                  <input
-                    type="radio"
-                    name="initOption"
-                    value="demo"
-                    checked={initOption === 'demo'}
-                    onChange={() => setInitOption('demo')}
-                    className="mt-0.5 text-[#e86a28] focus:ring-[#e86a28]"
-                  />
-                  <div>
-                    <span className="font-bold text-[#241a14] block">
-                      Muat Sampel Obat Percobaan (5 Obat Demo)
-                    </span>
-                    <span className="text-[11px] text-[#716358]">
-                      Menyertakan Paracetamol, Amoxicillin, Cetirizine, dll untuk simulasi uji coba.
-                    </span>
-                  </div>
-                </label>
-              </div>
+            <div className="rounded-2xl border border-emerald-200/80 bg-emerald-50/70 p-4 space-y-1">
+              <span className="font-bold text-emerald-950 block">
+                Etalase Master Obat Dimulai dari Nol (0 Obat)
+              </span>
+              <p className="text-[11px] text-emerald-800 leading-relaxed">
+                Katalog obat akan dimulai bersih dari nol tanpa data dummy. Anda dapat memasukkan data obat apotek Anda satu per satu lewat tombol &quot;+ Tambah Obat&quot;.
+              </p>
             </div>
           )}
 

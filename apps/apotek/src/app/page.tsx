@@ -216,6 +216,7 @@ export default function PharmacyAppPage() {
                 prescription={activePrescription}
                 isValidSignature={isValidSignature}
                 onDispenseSuccess={handleDispenseSuccess}
+                pharmacyProfile={pharmacyProfile}
               />
             </div>
           )}

@@ -4,9 +4,10 @@ import React, { useState, useEffect } from 'react';
 import {
   Plus,
   Search,
-  RotateCcw,
+  Trash2,
   TrendingDown,
   TrendingUp,
+  PackageOpen,
 } from 'lucide-react';
 import type { PharmacyItem, DispenseLog } from '../../lib/types';
 import {
@@ -14,7 +15,7 @@ import {
   addInventoryItem,
   updateInventoryItem,
   getDispenseHistory,
-  resetToDemoData,
+  clearInventory,
 } from '../../lib/inventory-store';
 
 export default function InventoryManager() {
@@ -66,9 +67,9 @@ export default function InventoryManager() {
     refreshData();
   };
 
-  const handleResetDemo = () => {
-    if (confirm('Kembalikan data stok obat dan riwayat transaksi ke data demo awal?')) {
-      resetToDemoData();
+  const handleClearInventory = () => {
+    if (confirm('Kosongkan semua daftar obat di katalog etalase? Anda bisa menambahkan obat baru satu per satu.')) {
+      clearInventory();
       refreshData();
     }
   };
@@ -116,14 +117,16 @@ export default function InventoryManager() {
               <span>Tambah Obat</span>
             </button>
           )}
-          <button
-            onClick={handleResetDemo}
-            className="flex items-center gap-1 rounded-full border border-[#ebdccd] bg-white px-3.5 py-1.5 text-xs text-[#716358] hover:bg-[#f5ece1] hover:text-[#241a14] transition"
-            title="Reset data demo"
-          >
-            <RotateCcw className="h-3.5 w-3.5 text-[#a39487]" />
-            <span>Reset</span>
-          </button>
+          {items.length > 0 && activeTab === 'inventory' && (
+            <button
+              onClick={handleClearInventory}
+              className="flex items-center gap-1 rounded-full border border-[#ebdccd] bg-white px-3.5 py-1.5 text-xs text-[#716358] hover:bg-[#f5ece1] hover:text-red-700 transition"
+              title="Kosongkan katalog stok"
+            >
+              <Trash2 className="h-3.5 w-3.5 text-[#a39487]" />
+              <span>Kosongkan</span>
+            </button>
+          )}
         </div>
       </div>
 
@@ -229,56 +232,72 @@ export default function InventoryManager() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#ebdccd]/50">
-                {filteredItems.map((item) => {
-                  const isLow = item.currentStock <= item.minStockAlert;
-                  const isOut = item.currentStock === 0;
+                {filteredItems.length === 0 ? (
+                  <tr>
+                    <td colSpan={5} className="py-12 text-center text-[#716358]">
+                      <PackageOpen className="h-8 w-8 text-[#a39487] mx-auto mb-2" />
+                      <p className="font-bold text-xs text-[#241a14]">
+                        {searchTerm ? 'Obat tidak ditemukan' : 'Etalase Obat Masih Kosong'}
+                      </p>
+                      <p className="text-[11px] text-[#716358] mt-1 max-w-xs mx-auto">
+                        {searchTerm
+                          ? 'Coba gunakan kata kunci pencarian lain.'
+                          : 'Belum ada obat yang didaftarkan. Klik tombol "+ Tambah Obat" di atas untuk memasukkan obat pertama Anda.'}
+                      </p>
+                    </td>
+                  </tr>
+                ) : (
+                  filteredItems.map((item) => {
+                    const isLow = item.currentStock <= item.minStockAlert;
+                    const isOut = item.currentStock === 0;
 
-                  return (
-                    <tr key={item.id} className="hover:bg-[#fbfbf8]/80 transition">
-                      <td className="px-4 py-3">
-                        <span className="font-bold text-[#241a14] block">{item.name}</span>
-                        <span className="text-[10px] font-mono text-[#a39487]">{item.id}</span>
-                      </td>
-                      <td className="px-4 py-3 text-[#716358]">
-                        {item.category}
-                      </td>
-                      <td className="px-4 py-3 font-mono font-medium text-[#241a14]">
-                        Rp {item.price.toLocaleString('id-ID')} / {item.unit}
-                      </td>
-                      <td className="px-4 py-3 text-center">
-                        <span
-                          className={`font-mono text-xs font-bold px-3 py-1 rounded-full ${
-                            isOut
-                              ? 'text-red-900 bg-red-50 border border-red-200'
-                              : isLow
-                              ? 'text-amber-900 bg-amber-50 border border-amber-200'
-                              : 'text-[#241a14] bg-[#f5ece1] border border-[#ebdccd]'
-                          }`}
-                        >
-                          {item.currentStock} {item.unit}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 text-right">
-                        <div className="inline-flex items-center gap-1.5">
-                          <button
-                            onClick={() => handleStockAdjust(item.id, -10)}
-                            className="rounded-full border border-[#ebdccd] bg-white p-1.5 text-[#716358] hover:bg-[#f5ece1] hover:text-red-700 transition"
-                            title="Kurang 10"
+                    return (
+                      <tr key={item.id} className="hover:bg-[#fbfbf8]/80 transition">
+                        <td className="px-4 py-3">
+                          <span className="font-bold text-[#241a14] block">{item.name}</span>
+                          <span className="text-[10px] font-mono text-[#a39487]">{item.id}</span>
+                        </td>
+                        <td className="px-4 py-3 text-[#716358]">
+                          {item.category}
+                        </td>
+                        <td className="px-4 py-3 font-mono font-medium text-[#241a14]">
+                          Rp {item.price.toLocaleString('id-ID')} / {item.unit}
+                        </td>
+                        <td className="px-4 py-3 text-center">
+                          <span
+                            className={`font-mono text-xs font-bold px-3 py-1 rounded-full ${
+                              isOut
+                                ? 'text-red-900 bg-red-50 border border-red-200'
+                                : isLow
+                                ? 'text-amber-900 bg-amber-50 border border-amber-200'
+                                : 'text-[#241a14] bg-[#f5ece1] border border-[#ebdccd]'
+                            }`}
                           >
-                            <TrendingDown className="h-3.5 w-3.5 text-red-600" />
-                          </button>
-                          <button
-                            onClick={() => handleStockAdjust(item.id, 10)}
-                            className="rounded-full border border-[#ebdccd] bg-white p-1.5 text-[#716358] hover:bg-[#f5ece1] hover:text-emerald-700 transition"
-                            title="Tambah 10"
-                          >
-                            <TrendingUp className="h-3.5 w-3.5 text-emerald-700" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
+                            {item.currentStock} {item.unit}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 text-right">
+                          <div className="inline-flex items-center gap-1.5">
+                            <button
+                              onClick={() => handleStockAdjust(item.id, -10)}
+                              className="rounded-full border border-[#ebdccd] bg-white p-1.5 text-[#716358] hover:bg-[#f5ece1] hover:text-red-700 transition"
+                              title="Kurang 10"
+                            >
+                              <TrendingDown className="h-3.5 w-3.5 text-red-600" />
+                            </button>
+                            <button
+                              onClick={() => handleStockAdjust(item.id, 10)}
+                              className="rounded-full border border-[#ebdccd] bg-white p-1.5 text-[#716358] hover:bg-[#f5ece1] hover:text-emerald-700 transition"
+                              title="Tambah 10"
+                            >
+                              <TrendingUp className="h-3.5 w-3.5 text-emerald-700" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
               </tbody>
             </table>
           </div>
