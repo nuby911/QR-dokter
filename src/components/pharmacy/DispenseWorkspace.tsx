@@ -140,15 +140,15 @@ export default function DispenseWorkspace({
     <div className="space-y-4">
       {/* Previous Dispense Alert Banner */}
       {previousDispense && (
-        <div className="flex items-start gap-2.5 rounded border border-amber-200 bg-amber-50 p-3.5 text-xs text-amber-900">
+        <div className="flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50/80 p-4 text-xs text-amber-900 shadow-sm">
           <History className="h-4 w-4 text-amber-700 shrink-0 mt-0.5" />
           <div className="space-y-0.5">
-            <span className="font-semibold block text-amber-950">
+            <span className="font-bold block text-amber-950">
               Riwayat Penebusan Terdahulu Terdeteksi
             </span>
-            <p className="text-amber-800">
+            <p className="text-amber-800 leading-relaxed">
               Resep ini pernah dilayani di apotek pada{' '}
-              <strong className="font-semibold font-mono">{new Date(previousDispense.timestamp).toLocaleString('id-ID')}</strong>.
+              <strong className="font-bold font-mono">{new Date(previousDispense.timestamp).toLocaleString('id-ID')}</strong>.
               Total item sebelumnya: {previousDispense.items.map((i) => `${i.inventoryName} (${i.qtyDispensed})`).join(', ')}.
             </p>
           </div>
@@ -157,70 +157,70 @@ export default function DispenseWorkspace({
 
       {/* Completed Dispense Modal / Success Box */}
       {completedLog ? (
-        <div className="rounded-lg border border-neutral-200 bg-white p-6 text-center space-y-5">
-          <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-neutral-900 text-white">
-            <Check className="h-5 w-5" />
+        <div className="rounded-3xl border border-[#ebdccd] bg-white p-7 text-center space-y-5 shadow-sm">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#241a14] text-white">
+            <Check className="h-6 w-6 text-[#e86a28]" />
           </div>
 
           <div>
-            <h3 className="text-base font-bold text-neutral-900">
+            <h3 className="text-lg font-black text-[#241a14] tracking-tight">
               Transaksi Selesai &bull; Stok Berhasil Dipotong
             </h3>
-            <p className="text-xs text-neutral-500 mt-1 max-w-sm mx-auto">
+            <p className="text-xs sm:text-sm text-[#716358] mt-1 max-w-sm mx-auto">
               Stok fisik di sistem inventaris apotek telah diperbarui. Struk kasir di bawah siap dicetak.
             </p>
           </div>
 
           {/* Struk Rincian Belanja Kasir */}
-          <div className="mx-auto max-w-sm rounded border border-neutral-200 bg-white p-5 text-left text-xs font-mono text-neutral-900 space-y-3">
-            <div className="border-b border-dashed border-neutral-300 pb-2.5 text-center space-y-0.5">
-              <h4 className="font-bold">APOTEK MITRA SEHAT</h4>
-              <p className="text-[10px] text-neutral-500">BUKTI PELAYANAN RESEP</p>
-              <p className="text-[10px] text-neutral-500">TRX: {completedLog.id}</p>
-              <p className="text-[10px] text-neutral-500">{new Date(completedLog.timestamp).toLocaleString('id-ID')}</p>
+          <div className="mx-auto max-w-sm rounded-2xl border border-[#ebdccd] bg-[#fbfbf8] p-5 text-left text-xs font-mono text-[#241a14] space-y-3 shadow-inner">
+            <div className="border-b border-dashed border-[#d5c3b1] pb-3 text-center space-y-0.5">
+              <h4 className="font-bold text-sm">APOTEK MITRA SEHAT</h4>
+              <p className="text-[10px] text-[#716358]">BUKTI PELAYANAN RESEP</p>
+              <p className="text-[10px] text-[#716358]">TRX: {completedLog.id}</p>
+              <p className="text-[10px] text-[#716358]">{new Date(completedLog.timestamp).toLocaleString('id-ID')}</p>
             </div>
 
-            <div className="border-b border-dashed border-neutral-300 pb-2 text-[11px] space-y-0.5">
+            <div className="border-b border-dashed border-[#d5c3b1] pb-2.5 text-[11px] space-y-0.5">
               <div className="flex justify-between">
-                <span className="text-neutral-500">Pasien:</span>
-                <span className="font-medium">{completedLog.patientName}</span>
+                <span className="text-[#716358]">Pasien:</span>
+                <span className="font-bold">{completedLog.patientName}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-neutral-500">Dokter:</span>
+                <span className="text-[#716358]">Dokter:</span>
                 <span>{completedLog.doctorName}</span>
               </div>
             </div>
 
-            <div className="border-b border-dashed border-neutral-300 pb-2 space-y-1.5">
+            <div className="border-b border-dashed border-[#d5c3b1] pb-2.5 space-y-1.5">
               {completedLog.items.map((it, idx) => (
                 <div key={idx} className="flex justify-between text-[11px]">
                   <span>
                     {it.inventoryName} &times; {it.qtyDispensed}
                   </span>
-                  <span className="font-medium">
+                  <span className="font-bold">
                     Rp {it.subtotal.toLocaleString('id-ID')}
                   </span>
                 </div>
               ))}
             </div>
 
-            <div className="pt-1 flex justify-between font-bold text-sm">
+            <div className="pt-1 flex justify-between font-black text-sm">
               <span>TOTAL PEMBAYARAN:</span>
-              <span>Rp {completedLog.totalAmount.toLocaleString('id-ID')}</span>
+              <span className="text-[#e86a28]">Rp {completedLog.totalAmount.toLocaleString('id-ID')}</span>
             </div>
           </div>
 
-          <div className="flex justify-center gap-2 pt-1">
+          <div className="flex justify-center gap-2.5 pt-1">
             <button
               onClick={() => window.print()}
-              className="flex items-center gap-1.5 rounded border border-neutral-200 bg-white px-4 py-2 text-xs font-medium text-neutral-700 hover:bg-neutral-50"
+              className="flex items-center gap-1.5 rounded-full border border-[#ebdccd] bg-white px-5 py-2.5 text-xs font-semibold text-[#241a14] hover:bg-[#f5ece1] transition"
             >
-              <Printer className="h-3.5 w-3.5" />
+              <Printer className="h-4 w-4 text-[#e86a28]" />
               <span>Cetak Struk</span>
             </button>
             <button
               onClick={() => setCompletedLog(null)}
-              className="rounded bg-neutral-900 px-5 py-2 text-xs font-semibold text-white hover:bg-neutral-800"
+              className="rounded-full bg-[#e86a28] hover:bg-[#d95a18] px-6 py-2.5 text-xs font-bold text-white shadow-sm transition active:scale-[0.99]"
             >
               Layani Resep Baru
             </button>
@@ -228,64 +228,64 @@ export default function DispenseWorkspace({
         </div>
       ) : (
         /* Split Screen Workspace */
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 items-start">
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-12 items-start">
           {/* Left Column: Doctor Verified Prescription (5 cols) */}
-          <div className="lg:col-span-5 rounded-lg border border-neutral-200 bg-white p-4 space-y-3">
-            <div className="flex items-center justify-between border-b border-neutral-100 pb-2.5">
-              <span className="text-[11px] font-mono uppercase text-neutral-400">
+          <div className="lg:col-span-5 rounded-3xl border border-[#ebdccd] bg-white p-5 sm:p-6 shadow-sm space-y-4">
+            <div className="flex items-center justify-between border-b border-[#ebdccd]/60 pb-3">
+              <span className="text-[11px] font-mono uppercase font-bold text-[#716358]">
                 1. RESEP ASLI DOKTER
               </span>
               {isValidSignature ? (
-                <span className="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">
+                <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-900 bg-emerald-50 border border-emerald-200/80 px-2.5 py-0.5 rounded-full">
                   <CheckCircle2 className="h-3 w-3 text-emerald-700" /> Sah (Ed25519)
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1 text-[11px] font-medium text-red-800 bg-red-50 border border-red-200 px-2 py-0.5 rounded">
+                <span className="inline-flex items-center gap-1 text-[11px] font-bold text-red-900 bg-red-50 border border-red-200 px-2.5 py-0.5 rounded-full">
                   <AlertTriangle className="h-3 w-3 text-red-700" /> Tidak Sah
                 </span>
               )}
             </div>
 
             <div>
-              <h4 className="font-bold text-neutral-900 text-sm">
+              <h4 className="font-bold text-[#241a14] text-base">
                 {prescription.doc.n}
               </h4>
-              <p className="text-[11px] text-neutral-500 font-mono">
+              <p className="text-xs text-[#716358] font-mono mt-0.5">
                 {prescription.doc.sip} &bull; {prescription.doc.faskes}
               </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 rounded bg-neutral-50 p-2.5 text-xs">
+            <div className="grid grid-cols-2 gap-2 rounded-2xl border border-[#ebdccd] bg-[#fbfbf8] p-3 text-xs">
               <div>
-                <span className="text-[10px] uppercase font-mono text-neutral-400 block">Pasien</span>
-                <span className="font-semibold text-neutral-900">
+                <span className="text-[10px] uppercase font-mono text-[#a39487] block">Pasien</span>
+                <span className="font-bold text-[#241a14] mt-0.5 block">
                   {prescription.pat.n}
                 </span>
-                <span className="text-[11px] text-neutral-500 block">
+                <span className="text-[11px] text-[#716358] block">
                   {prescription.pat.a} th / {prescription.pat.g}
                 </span>
               </div>
               <div>
-                <span className="text-[10px] uppercase font-mono text-neutral-400 block">Tanggal Resep</span>
-                <span className="font-mono text-neutral-900">{prescription.dt}</span>
-                <span className="text-[10px] font-mono text-neutral-400 block mt-0.5">{prescription.id}</span>
+                <span className="text-[10px] uppercase font-mono text-[#a39487] block">Tanggal Resep</span>
+                <span className="font-mono font-bold text-[#241a14] mt-0.5 block">{prescription.dt}</span>
+                <span className="text-[10px] font-mono text-[#a39487] block mt-0.5">{prescription.id}</span>
               </div>
             </div>
 
             <div className="space-y-2 pt-1">
-              <div className="text-[11px] font-mono uppercase text-neutral-400">
+              <div className="text-[11px] font-mono uppercase font-bold text-[#716358]">
                 Preskripsi (R/):
               </div>
               {prescription.rx.map((item, idx) => (
                 <div
                   key={idx}
-                  className="rounded border border-neutral-200 bg-neutral-50/50 p-2.5 text-xs space-y-0.5"
+                  className="rounded-2xl border border-[#ebdccd] bg-[#fbfbf8]/70 p-3 text-xs space-y-1"
                 >
-                  <div className="flex justify-between font-bold text-neutral-900">
+                  <div className="flex justify-between font-bold text-[#241a14]">
                     <span>{idx + 1}. {item.n}</span>
-                    <span className="font-mono">No. {item.q}</span>
+                    <span className="font-mono bg-white border border-[#ebdccd] rounded-full px-2 py-0.5">No. {item.q}</span>
                   </div>
-                  <p className="text-[11px] text-neutral-600 italic">
+                  <p className="text-[11px] text-[#716358] italic">
                     S. {item.s}
                   </p>
                 </div>
@@ -294,12 +294,12 @@ export default function DispenseWorkspace({
           </div>
 
           {/* Right Column: Inventory Mapping & Cashier Checkout (7 cols) */}
-          <div className="lg:col-span-7 rounded-lg border border-neutral-200 bg-white p-4 space-y-4">
-            <div className="flex items-center justify-between border-b border-neutral-100 pb-2.5">
-              <span className="text-[11px] font-mono uppercase text-neutral-400">
+          <div className="lg:col-span-7 rounded-3xl border border-[#ebdccd] bg-white p-5 sm:p-6 shadow-sm space-y-4">
+            <div className="flex items-center justify-between border-b border-[#ebdccd]/60 pb-3">
+              <span className="text-[11px] font-mono uppercase font-bold text-[#716358]">
                 2. PENCOCOKAN STOK RAK &amp; KASIR
               </span>
-              <span className="text-[10px] font-mono text-neutral-400">
+              <span className="text-[10px] font-mono text-[#a39487]">
                 SINKRONISASI STOK LOKAL
               </span>
             </div>
@@ -313,19 +313,19 @@ export default function DispenseWorkspace({
                 return (
                   <div
                     key={idx}
-                    className="rounded border border-neutral-200 bg-neutral-50/40 p-3 space-y-2 text-xs"
+                    className="rounded-2xl border border-[#ebdccd] bg-[#fbfbf8]/70 p-3.5 space-y-2.5 text-xs"
                   >
                     <div className="flex justify-between items-center">
-                      <div className="font-semibold text-neutral-900">
+                      <div className="font-bold text-[#241a14]">
                         {idx + 1}. {row.prescribedDrugName} (Permintaan: {row.prescribedQty})
                       </div>
 
                       {selectedInv && (
                         <span
-                          className={`font-mono text-[11px] font-medium ${
+                          className={`font-mono text-[11px] font-semibold ${
                             isOutOfStock
                               ? 'text-red-700'
-                              : 'text-neutral-600'
+                              : 'text-[#716358]'
                           }`}
                         >
                           Sisa Rak: {selectedInv.currentStock} {selectedInv.unit}
@@ -339,7 +339,7 @@ export default function DispenseWorkspace({
                         <select
                           value={row.selectedInventoryId}
                           onChange={(e) => handleRowChange(idx, 'selectedInventoryId', e.target.value)}
-                          className="w-full rounded border border-neutral-200 bg-white px-2.5 py-1.5 text-xs text-neutral-900 focus:border-neutral-900 focus:outline-none"
+                          className="w-full rounded-xl border border-[#ebdccd] bg-white px-3 py-2 text-xs text-[#241a14] focus:border-[#e86a28] focus:outline-none transition"
                         >
                           {inventoryList.map((inv) => (
                             <option key={inv.id} value={inv.id}>
@@ -351,20 +351,20 @@ export default function DispenseWorkspace({
 
                       {/* Quantity Input */}
                       <div className="sm:col-span-4 flex items-center gap-1.5">
-                        <span className="text-[11px] text-neutral-500">Tebus:</span>
+                        <span className="text-[11px] text-[#716358] font-semibold">Tebus:</span>
                         <input
                           type="number"
                           min="1"
                           max={selectedInv ? selectedInv.currentStock : 999}
                           value={row.qtyToDispense}
                           onChange={(e) => handleRowChange(idx, 'qtyToDispense', Number(e.target.value))}
-                          className="w-full rounded border border-neutral-200 bg-white px-2 py-1 text-xs font-mono font-bold text-center text-neutral-900 focus:border-neutral-900 focus:outline-none"
+                          className="w-full rounded-xl border border-[#ebdccd] bg-white px-2.5 py-1.5 text-xs font-mono font-bold text-center text-[#241a14] focus:border-[#e86a28] focus:outline-none transition"
                         />
                       </div>
                     </div>
 
                     {isOutOfStock && (
-                      <p className="text-[11px] text-red-600 font-medium">
+                      <p className="text-[11px] text-red-600 font-bold">
                         Stok fisik tidak mencukupi untuk kuantitas ini ({row.qtyToDispense} &gt; {selectedInv?.currentStock}).
                       </p>
                     )}
@@ -375,7 +375,7 @@ export default function DispenseWorkspace({
 
             {/* Notes */}
             <div>
-              <label className="block text-xs font-medium text-neutral-600 mb-1">
+              <label className="block text-xs font-bold text-[#716358] mb-1">
                 Catatan Petugas Apoteker (Opsional)
               </label>
               <input
@@ -383,17 +383,17 @@ export default function DispenseWorkspace({
                 value={pharmacistNotes}
                 onChange={(e) => setPharmacistNotes(e.target.value)}
                 placeholder="misal: Penebusan penuh, substitusi disetujui"
-                className="w-full rounded border border-neutral-200 px-3 py-1.5 text-xs text-neutral-900 placeholder-neutral-400 focus:border-neutral-900 focus:outline-none"
+                className="w-full rounded-xl border border-[#ebdccd] px-3.5 py-2 text-xs text-[#241a14] placeholder-[#a39487] focus:border-[#e86a28] focus:outline-none transition"
               />
             </div>
 
             {/* Total Amount & Submit */}
-            <div className="rounded border border-neutral-900 bg-neutral-900 text-white p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div className="rounded-2xl border border-[#241a14] bg-[#241a14] text-white p-5 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-md">
               <div>
-                <span className="text-[10px] font-mono uppercase text-neutral-400 block">
+                <span className="text-[10px] font-mono uppercase text-[#a39487] block">
                   Total Biaya Obat
                 </span>
-                <span className="text-xl font-bold font-mono tracking-tight">
+                <span className="text-2xl font-black font-mono tracking-tight text-white">
                   Rp {calculateTotal().toLocaleString('id-ID')}
                 </span>
               </div>
@@ -401,7 +401,7 @@ export default function DispenseWorkspace({
               <button
                 type="button"
                 onClick={handleCompleteTransaction}
-                className="w-full sm:w-auto flex items-center justify-center gap-2 rounded bg-white px-5 py-2.5 text-xs font-bold text-neutral-900 hover:bg-neutral-100 transition active:scale-98"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-full bg-[#e86a28] hover:bg-[#d95a18] px-6 py-3 text-xs font-bold text-white shadow-sm transition active:scale-[0.99]"
               >
                 <Receipt className="h-4 w-4" />
                 <span>Selesaikan &amp; Potong Stok</span>

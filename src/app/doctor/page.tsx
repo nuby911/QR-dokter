@@ -68,19 +68,19 @@ export default function DoctorPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fbfbfb] text-neutral-900 pb-16">
+    <div className="min-h-screen bg-[#faf7f2] text-[#241a14] pb-20">
       <Navbar />
 
       {/* Main Content Workspace */}
       <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
-        <div className="border-b border-neutral-200 pb-6 mb-8">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-neutral-400 mb-1">
+        <div className="border-b border-[#ebdccd] pb-6 mb-8">
+          <div className="inline-block rounded-full bg-[#f5ece1] px-3 py-1 text-[11px] font-mono uppercase tracking-wider font-bold text-[#e86a28] mb-2">
             Terminal Peresepan Elektronik
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-neutral-900">
+          <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-[#241a14]">
             Penerbitan Resep Medis
           </h1>
-          <p className="mt-1 text-xs text-neutral-600">
+          <p className="mt-1.5 text-xs sm:text-sm text-[#716358]">
             Penulisan resep dengan tanda tangan kriptografi Ed25519 dan output cetak struk thermal 80mm.
           </p>
         </div>

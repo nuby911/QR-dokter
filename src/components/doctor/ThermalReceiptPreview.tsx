@@ -43,10 +43,10 @@ export default function ThermalReceiptPreview({
 
   if (!payload) {
     return (
-      <div className="flex h-full min-h-[420px] flex-col items-center justify-center rounded-lg border border-dashed border-neutral-300 bg-white p-6 text-center text-neutral-400">
-        <Printer className="mb-2 h-8 w-8 text-neutral-300" />
-        <p className="font-semibold text-neutral-700 text-xs">Struk Belum Diterbitkan</p>
-        <p className="mt-1 text-[11px] text-neutral-400 max-w-xs">
+      <div className="flex h-full min-h-[420px] flex-col items-center justify-center rounded-3xl border border-dashed border-[#d5c3b1] bg-white p-6 text-center text-[#716358] shadow-sm">
+        <Printer className="mb-2 h-8 w-8 text-[#a39487]" />
+        <p className="font-bold text-[#241a14] text-xs">Struk Belum Diterbitkan</p>
+        <p className="mt-1 text-[11px] text-[#716358] max-w-xs">
           Lengkapi data resep di sebelah kiri lalu klik &quot;Terbitkan &amp; Cetak Struk QR&quot;.
         </p>
       </div>
@@ -68,35 +68,35 @@ export default function ThermalReceiptPreview({
   return (
     <div className="flex flex-col items-center">
       {/* Action Toolbar */}
-      <div className="no-print mb-3 flex w-full max-w-[320px] items-center justify-between rounded border border-neutral-200 bg-white p-2 text-xs">
-        <div className="flex items-center gap-1.5 text-neutral-700 text-[11px] font-mono">
+      <div className="no-print mb-3 flex w-full max-w-[320px] items-center justify-between rounded-full border border-[#ebdccd] bg-white p-2 text-xs shadow-sm">
+        <div className="flex items-center gap-1.5 text-emerald-800 text-[11px] font-mono px-2 py-0.5 rounded-full bg-emerald-50">
           <ShieldCheck className="h-3.5 w-3.5 text-emerald-700" />
           <span>Ed25519 OK</span>
         </div>
         <div className="flex items-center gap-1">
           <button
             onClick={handleDownloadQr}
-            className="rounded border border-neutral-200 bg-white px-2 py-1 text-[11px] text-neutral-700 hover:bg-neutral-50 transition"
+            className="rounded-full border border-[#ebdccd] bg-[#fbfbf8] px-2.5 py-1 text-[11px] font-medium text-[#241a14] hover:bg-[#f5ece1] transition"
             title="Download gambar QR Code"
           >
-            <Download className="h-3 w-3 inline mr-1" />
+            <Download className="h-3 w-3 inline mr-1 text-[#e86a28]" />
             QR
           </button>
           <a
             href={targetUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded border border-neutral-200 bg-white px-2 py-1 text-[11px] text-neutral-700 hover:bg-neutral-50 transition"
+            className="rounded-full border border-[#ebdccd] bg-[#fbfbf8] px-2.5 py-1 text-[11px] font-medium text-[#241a14] hover:bg-[#f5ece1] transition"
             title="Buka tampilan resep pasien di tab baru"
           >
-            <ExternalLink className="h-3 w-3 inline mr-1" />
+            <ExternalLink className="h-3 w-3 inline mr-1 text-[#e86a28]" />
             Viewer
           </a>
           <button
             onClick={handlePrint}
-            className="flex items-center gap-1 rounded bg-neutral-900 px-2.5 py-1 text-[11px] font-semibold text-white hover:bg-neutral-800 transition"
+            className="flex items-center gap-1 rounded-full bg-[#241a14] px-3 py-1 text-[11px] font-semibold text-white hover:bg-[#382b22] transition"
           >
-            <Printer className="h-3 w-3" />
+            <Printer className="h-3 w-3 text-[#e86a28]" />
             Cetak
           </button>
         </div>
@@ -104,7 +104,7 @@ export default function ThermalReceiptPreview({
 
       {/* Authentic 80mm ESC/POS Thermal Receipt Paper Slip */}
       <div
-        className="thermal-receipt-print-area w-full max-w-[320px] bg-white border border-neutral-200 p-5 font-mono text-neutral-950 text-xs shadow-sm"
+        className="thermal-receipt-print-area w-full max-w-[320px] bg-white border border-[#ebdccd] rounded-2xl p-5 font-mono text-neutral-950 text-xs shadow-sm"
         style={{ minWidth: '280px' }}
       >
         {/* Clinic Header */}

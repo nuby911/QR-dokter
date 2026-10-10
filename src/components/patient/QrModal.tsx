@@ -37,31 +37,31 @@ export default function QrModal({ isOpen, onClose, payload }: QrModalProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="relative w-full max-w-sm rounded-lg bg-white p-6 shadow-xl border border-neutral-200 text-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+      <div className="relative w-full max-w-sm rounded-3xl bg-white p-7 shadow-2xl border border-[#ebdccd] text-center">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute right-3.5 top-3.5 rounded p-1.5 text-neutral-400 hover:text-neutral-900 transition"
+          className="absolute right-4 top-4 rounded-full bg-[#fbfbf8] hover:bg-[#f5ece1] p-2 text-[#716358] hover:text-[#241a14] transition"
           aria-label="Tutup"
         >
-          <X className="h-5 w-5" />
+          <X className="h-4 w-4" />
         </button>
 
-        <div className="text-xs font-mono uppercase tracking-wider text-neutral-400 mb-1">
+        <div className="rounded-full bg-[#f5ece1] text-[#e86a28] px-3 py-1 text-[11px] font-mono uppercase font-bold tracking-wider inline-block mb-2">
           KODE RESEP PASIEN
         </div>
-        <h3 className="text-base font-bold text-neutral-900 tracking-tight">
+        <h3 className="text-lg font-black text-[#241a14] tracking-tight">
           Pindai di Meja Apotek
         </h3>
-        <p className="mt-1 text-xs text-neutral-500">
+        <p className="mt-1 text-xs text-[#716358]">
           Arahkan layar ponsel ini ke scanner petugas farmasi
         </p>
 
         {/* High-Contrast QR Code */}
         <div className="my-5 flex justify-center">
           {qrDataUrl ? (
-            <div className="rounded border border-neutral-200 bg-white p-2">
+            <div className="rounded-2xl border border-[#ebdccd] bg-white p-3 shadow-sm">
               <img
                 src={qrDataUrl}
                 alt="QR Code Resep"
@@ -69,18 +69,18 @@ export default function QrModal({ isOpen, onClose, payload }: QrModalProps) {
               />
             </div>
           ) : (
-            <div className="h-60 w-60 rounded bg-neutral-100 flex items-center justify-center text-xs text-neutral-400">
+            <div className="h-60 w-60 rounded-2xl bg-[#faf7f2] flex items-center justify-center text-xs text-[#a39487]">
               Membuat QR...
             </div>
           )}
         </div>
 
-        <div className="flex items-center justify-center gap-1.5 text-xs text-neutral-700 bg-neutral-50 py-2 px-3 rounded border border-neutral-200">
-          <ShieldCheck className="h-4 w-4 text-emerald-700" />
+        <div className="flex items-center justify-center gap-1.5 text-xs text-emerald-900 bg-emerald-50 py-2 px-3 rounded-full border border-emerald-200/80 font-medium">
+          <ShieldCheck className="h-4 w-4 text-emerald-700 shrink-0" />
           <span>Tanda Tangan Digital: dr. {payload.doc.n.replace(/^dr\.\s*/i, '')}</span>
         </div>
 
-        <div className="mt-3 text-[11px] font-mono text-neutral-400">
+        <div className="mt-3 text-[11px] font-mono text-[#a39487]">
           Ref: {payload.id}
         </div>
       </div>

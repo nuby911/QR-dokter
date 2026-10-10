@@ -156,11 +156,11 @@ export default function PrescriptionForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Doctor Credentials & Host Banner */}
-      <div className="rounded-lg border border-neutral-200 bg-white p-4 space-y-3">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-neutral-100 pb-3">
+      <div className="rounded-3xl border border-[#ebdccd] bg-white p-5 sm:p-6 shadow-sm space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-[#ebdccd]/60 pb-4">
           <div>
-            <div className="text-xs font-bold text-neutral-900">{doctor.name}</div>
-            <div className="text-[11px] text-neutral-500 font-mono">
+            <div className="text-sm font-bold text-[#241a14]">{doctor.name}</div>
+            <div className="text-xs text-[#716358] font-mono mt-0.5">
               SIP: {doctor.sip} &bull; {doctor.faskes}
             </div>
           </div>
@@ -168,16 +168,16 @@ export default function PrescriptionForm({
           <button
             type="button"
             onClick={() => setShowKeyModal(!showKeyModal)}
-            className="inline-flex items-center gap-1.5 rounded border border-neutral-200 px-2 py-1 text-[11px] text-neutral-600 hover:bg-neutral-50 transition w-fit"
+            className="inline-flex items-center gap-1.5 rounded-full border border-[#ebdccd] bg-[#fbfbf8] px-3 py-1.5 text-xs font-medium text-[#241a14] hover:bg-[#f5ece1] transition w-fit"
           >
-            <Key className="h-3 w-3 text-neutral-500" />
+            <Key className="h-3.5 w-3.5 text-[#e86a28]" />
             <span>Kunci Ed25519</span>
           </button>
         </div>
 
         {/* QR Base URL Configuration */}
-        <div className="text-xs space-y-1.5">
-          <label className="block text-neutral-600 font-medium text-[11px]">
+        <div className="text-xs space-y-2">
+          <label className="block text-[#716358] font-bold text-xs">
             Host QR Pasien (Untuk Pemindaian Kamera Ponsel)
           </label>
           <div className="flex flex-col sm:flex-row gap-2">
@@ -186,15 +186,15 @@ export default function PrescriptionForm({
               value={baseUrl}
               onChange={(e) => onBaseUrlChange(e.target.value)}
               placeholder="http://192.168.1.7:3000"
-              className="flex-1 rounded border border-neutral-200 bg-neutral-50 px-3 py-1.5 font-mono text-xs text-neutral-900 focus:border-neutral-900 focus:bg-white focus:outline-none"
+              className="flex-1 rounded-full border border-[#ebdccd] bg-[#fbfbf8] px-4 py-2 font-mono text-xs text-[#241a14] focus:border-[#e86a28] focus:bg-white focus:outline-none transition"
             />
-            <div className="flex gap-1.5">
+            <div className="flex gap-2">
               <button
                 type="button"
                 onClick={() => onBaseUrlChange('http://192.168.1.7:3000')}
-                className="rounded bg-neutral-900 px-2.5 py-1.5 text-xs font-medium text-white hover:bg-neutral-800 transition flex items-center gap-1"
+                className="rounded-full bg-[#241a14] px-4 py-2 text-xs font-semibold text-white hover:bg-[#382b22] transition flex items-center gap-1.5 shrink-0"
               >
-                <Smartphone className="h-3 w-3" />
+                <Smartphone className="h-3.5 w-3.5 text-[#e86a28]" />
                 <span>Wi-Fi (192.168.1.7)</span>
               </button>
               <button
@@ -202,7 +202,7 @@ export default function PrescriptionForm({
                 onClick={() => {
                   if (typeof window !== 'undefined') onBaseUrlChange(window.location.origin);
                 }}
-                className="rounded border border-neutral-200 bg-white px-2.5 py-1.5 text-xs text-neutral-600 hover:bg-neutral-50"
+                className="rounded-full border border-[#ebdccd] bg-white px-3.5 py-2 text-xs font-medium text-[#716358] hover:bg-[#f5ece1] hover:text-[#241a14] transition shrink-0"
               >
                 Localhost
               </button>
@@ -212,31 +212,31 @@ export default function PrescriptionForm({
 
         {/* Keys Details Drawer */}
         {showKeyModal && (
-          <div className="rounded border border-neutral-200 bg-neutral-50 p-3 text-xs space-y-2 mt-2">
-            <div className="flex items-center justify-between font-semibold text-neutral-800">
+          <div className="rounded-2xl border border-[#ebdccd] bg-[#faf7f2] p-4 text-xs space-y-2.5 mt-2">
+            <div className="flex items-center justify-between font-bold text-[#241a14]">
               <span>Pasangan Kunci Kriptografi (Ed25519)</span>
               <button
                 type="button"
                 onClick={handleGenerateKeys}
-                className="text-neutral-900 underline text-[11px]"
+                className="text-[#e86a28] hover:text-[#d95a18] font-semibold underline text-xs"
               >
                 Generate Ulang
               </button>
             </div>
             <div>
-              <span className="text-[10px] uppercase font-mono text-neutral-400 block">
-                Public Key (Diverifikasi oleh Viewer &amp; Apotek)
+              <span className="text-[10px] uppercase font-mono text-[#a39487] block">
+                Public Key (Diverifikasi oleh Pasien &amp; Apotek)
               </span>
-              <p className="font-mono text-[10px] text-neutral-800 break-all bg-white p-1.5 rounded border border-neutral-200 mt-0.5">
+              <p className="font-mono text-[10px] text-[#241a14] break-all bg-white p-2 rounded-xl border border-[#ebdccd] mt-1">
                 {doctor.publicKey}
               </p>
             </div>
             <div>
-              <span className="text-[10px] uppercase font-mono text-neutral-400 block">
+              <span className="text-[10px] uppercase font-mono text-[#a39487] block">
                 Private Key (Tersimpan Lokal untuk Tanda Tangan)
               </span>
-              <p className="font-mono text-[10px] text-neutral-800 break-all bg-white p-1.5 rounded border border-neutral-200 mt-0.5">
-                {doctor.privateKey.slice(0, 16)}... (Aman di memori)
+              <p className="font-mono text-[10px] text-[#241a14] break-all bg-white p-2 rounded-xl border border-[#ebdccd] mt-1">
+                {doctor.privateKey.slice(0, 16)}... (Aman di memori lokal)
               </p>
             </div>
           </div>
@@ -244,14 +244,14 @@ export default function PrescriptionForm({
       </div>
 
       {/* Patient Information Section */}
-      <div className="rounded-lg border border-neutral-200 bg-white p-4 sm:p-5 space-y-3">
-        <div className="text-xs font-mono uppercase tracking-wider text-neutral-400">
+      <div className="rounded-3xl border border-[#ebdccd] bg-white p-5 sm:p-6 shadow-sm space-y-4">
+        <div className="text-xs font-mono uppercase tracking-wider font-bold text-[#716358]">
           Data Pasien
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs">
           <div className="sm:col-span-2">
-            <label className="block text-neutral-600 font-medium mb-1">
+            <label className="block text-[#716358] font-medium mb-1">
               Nama Lengkap
             </label>
             <input
@@ -259,13 +259,13 @@ export default function PrescriptionForm({
               required
               value={patientName}
               onChange={(e) => setPatientName(e.target.value)}
-              className="w-full rounded border border-neutral-200 px-3 py-1.5 text-neutral-900 focus:border-neutral-900 focus:outline-none"
+              className="w-full rounded-xl border border-[#ebdccd] bg-[#fbfbf8] px-3.5 py-2 text-[#241a14] focus:border-[#e86a28] focus:bg-white focus:outline-none transition"
               placeholder="e.g. Budi Santoso"
             />
           </div>
 
           <div>
-            <label className="block text-neutral-600 font-medium mb-1">
+            <label className="block text-[#716358] font-medium mb-1">
               Usia (Tahun)
             </label>
             <input
@@ -275,18 +275,18 @@ export default function PrescriptionForm({
               required
               value={patientAge}
               onChange={(e) => setPatientAge(Number(e.target.value))}
-              className="w-full rounded border border-neutral-200 px-3 py-1.5 text-neutral-900 focus:border-neutral-900 focus:outline-none"
+              className="w-full rounded-xl border border-[#ebdccd] bg-[#fbfbf8] px-3.5 py-2 text-[#241a14] focus:border-[#e86a28] focus:bg-white focus:outline-none transition"
             />
           </div>
 
           <div>
-            <label className="block text-neutral-600 font-medium mb-1">
+            <label className="block text-[#716358] font-medium mb-1">
               Jenis Kelamin
             </label>
             <select
               value={patientGender}
               onChange={(e) => setPatientGender(e.target.value as 'L' | 'P')}
-              className="w-full rounded border border-neutral-200 px-3 py-1.5 text-neutral-900 focus:border-neutral-900 focus:outline-none"
+              className="w-full rounded-xl border border-[#ebdccd] bg-[#fbfbf8] px-3.5 py-2 text-[#241a14] focus:border-[#e86a28] focus:bg-white focus:outline-none transition"
             >
               <option value="L">Laki-laki</option>
               <option value="P">Perempuan</option>
@@ -296,21 +296,21 @@ export default function PrescriptionForm({
       </div>
 
       {/* Prescription Medications Section */}
-      <div className="rounded-lg border border-neutral-200 bg-white p-4 sm:p-5 space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-neutral-100 pb-3">
-          <div className="text-xs font-mono uppercase tracking-wider text-neutral-400">
+      <div className="rounded-3xl border border-[#ebdccd] bg-white p-5 sm:p-6 shadow-sm space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 border-b border-[#ebdccd]/60 pb-3">
+          <div className="text-xs font-mono uppercase tracking-wider font-bold text-[#716358]">
             Daftar Obat (R/)
           </div>
 
           {/* Quick Preset Buttons */}
           <div className="flex flex-wrap items-center gap-1.5">
-            <span className="text-[11px] text-neutral-400">Template Cepat:</span>
+            <span className="text-[11px] text-[#a39487]">Template Cepat:</span>
             {DEMO_PRESCRIPTION_TEMPLATES.map((tmpl, idx) => (
               <button
                 key={idx}
                 type="button"
                 onClick={() => handleApplyTemplate(idx)}
-                className="rounded border border-neutral-200 bg-neutral-50 px-2 py-0.5 text-[11px] text-neutral-700 hover:bg-neutral-100 transition"
+                className="rounded-full border border-[#ebdccd] bg-[#fbfbf8] px-3 py-1 text-[11px] font-medium text-[#716358] hover:bg-[#f5ece1] hover:text-[#241a14] transition"
               >
                 {tmpl.title}
               </button>
@@ -319,13 +319,13 @@ export default function PrescriptionForm({
         </div>
 
         {/* Drug Item Rows */}
-        <div className="space-y-2.5">
+        <div className="space-y-3">
           {items.map((item, index) => (
             <div
               key={index}
-              className="flex flex-col sm:flex-row sm:items-center gap-2 rounded border border-neutral-200 bg-neutral-50/50 p-2 text-xs"
+              className="flex flex-col sm:flex-row sm:items-center gap-2.5 rounded-2xl border border-[#ebdccd] bg-[#fbfbf8]/70 p-3 text-xs"
             >
-              <span className="font-mono text-xs font-bold text-neutral-400 w-5 text-center shrink-0">
+              <span className="font-mono text-xs font-bold text-[#a39487] w-6 text-center shrink-0">
                 {index + 1}.
               </span>
 
@@ -336,7 +336,7 @@ export default function PrescriptionForm({
                   placeholder="Nama & Dosis Obat (e.g. Paracetamol 500mg)"
                   value={item.n}
                   onChange={(e) => handleItemChange(index, 'n', e.target.value)}
-                  className="w-full rounded border border-neutral-200 bg-white px-2.5 py-1.5 font-medium text-neutral-900 focus:border-neutral-900 focus:outline-none"
+                  className="w-full rounded-xl border border-[#ebdccd] bg-white px-3 py-2 font-medium text-[#241a14] focus:border-[#e86a28] focus:outline-none transition"
                 />
               </div>
 
@@ -348,7 +348,7 @@ export default function PrescriptionForm({
                   placeholder="Qty"
                   value={item.q}
                   onChange={(e) => handleItemChange(index, 'q', Number(e.target.value))}
-                  className="w-full rounded border border-neutral-200 bg-white px-2.5 py-1.5 font-mono text-center text-neutral-900 focus:border-neutral-900 focus:outline-none"
+                  className="w-full rounded-xl border border-[#ebdccd] bg-white px-2 py-2 font-mono text-center font-bold text-[#241a14] focus:border-[#e86a28] focus:outline-none transition"
                 />
               </div>
 
@@ -359,7 +359,7 @@ export default function PrescriptionForm({
                   placeholder="Aturan Pakai (e.g. 3x1 tablet sesudah makan)"
                   value={item.s}
                   onChange={(e) => handleItemChange(index, 's', e.target.value)}
-                  className="w-full rounded border border-neutral-200 bg-white px-2.5 py-1.5 text-neutral-900 focus:border-neutral-900 focus:outline-none"
+                  className="w-full rounded-xl border border-[#ebdccd] bg-white px-3 py-2 text-[#241a14] focus:border-[#e86a28] focus:outline-none transition"
                 />
               </div>
 
@@ -367,10 +367,10 @@ export default function PrescriptionForm({
                 type="button"
                 onClick={() => handleRemoveItem(index)}
                 disabled={items.length <= 1}
-                className="p-1.5 text-neutral-400 hover:text-red-600 disabled:opacity-20 transition"
+                className="p-2 text-[#a39487] hover:text-red-600 disabled:opacity-20 transition"
                 title="Hapus baris obat"
               >
-                <Trash2 className="h-3.5 w-3.5" />
+                <Trash2 className="h-4 w-4" />
               </button>
             </div>
           ))}
@@ -379,9 +379,9 @@ export default function PrescriptionForm({
         <button
           type="button"
           onClick={handleAddItem}
-          className="inline-flex items-center gap-1.5 rounded border border-dashed border-neutral-300 px-3 py-1.5 text-xs text-neutral-700 hover:bg-neutral-50 transition"
+          className="inline-flex items-center gap-2 rounded-full border border-dashed border-[#d5c3b1] px-4 py-2 text-xs font-medium text-[#716358] hover:bg-[#f5ece1] hover:text-[#241a14] transition"
         >
-          <Plus className="h-3.5 w-3.5" /> Tambah Obat Lain
+          <Plus className="h-3.5 w-3.5 text-[#e86a28]" /> Tambah Obat Lain
         </button>
       </div>
 
@@ -389,7 +389,7 @@ export default function PrescriptionForm({
       <button
         type="submit"
         disabled={isGenerating}
-        className="flex w-full items-center justify-center gap-2 rounded bg-neutral-900 py-3 text-xs font-bold text-white hover:bg-neutral-800 transition active:scale-[0.99] disabled:opacity-50"
+        className="flex w-full items-center justify-center gap-2 rounded-full bg-[#e86a28] hover:bg-[#d95a18] py-4 text-xs sm:text-sm font-bold text-white shadow-md hover:shadow-lg transition active:scale-[0.99] disabled:opacity-50"
       >
         <CheckCircle2 className="h-4 w-4" />
         <span>{isGenerating ? 'Menandatangani Kriptografi...' : 'Terbitkan & Cetak Struk QR'}</span>

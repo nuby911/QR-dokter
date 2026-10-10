@@ -50,19 +50,19 @@ export default function PharmacyPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fbfbfb] text-neutral-900 pb-24">
+    <div className="min-h-screen bg-[#faf7f2] text-[#241a14] pb-24">
       <Navbar />
 
       {/* Main Container */}
       <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6 space-y-6">
-        <div className="border-b border-neutral-200 pb-6">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-neutral-400 mb-1">
+        <div className="border-b border-[#ebdccd] pb-6">
+          <div className="rounded-full bg-[#f5ece1] text-[#e86a28] px-3 py-1 text-[11px] font-mono uppercase font-bold tracking-wider inline-block mb-2">
             Terminal Kasir Farmasi
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-neutral-900">
+          <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-[#241a14]">
             Pelayanan Tebus Resep &amp; Inventaris
           </h1>
-          <p className="mt-1 text-xs text-neutral-600">
+          <p className="mt-1.5 text-xs sm:text-sm text-[#716358]">
             Pemindaian QR resep, pencocokan sediaan etalase, dan pemotongan stok otomatis.
           </p>
         </div>
@@ -75,7 +75,7 @@ export default function PharmacyPage() {
 
         {/* Error Alert if any */}
         {errorMessage && (
-          <div className="rounded-lg border border-red-200 bg-red-50 p-3.5 text-xs font-medium text-red-800">
+          <div className="rounded-2xl border border-red-200 bg-red-50/80 p-4 text-xs font-medium text-red-800 shadow-sm">
             {errorMessage}
           </div>
         )}
@@ -83,13 +83,13 @@ export default function PharmacyPage() {
         {/* 2. Dispense Workspace (Active when prescription is scanned) */}
         {activePrescription && (
           <div className="space-y-3 pt-2">
-            <div className="flex items-center justify-between border-b border-neutral-200 pb-2">
-              <h2 className="text-xs font-mono uppercase tracking-wider text-neutral-500">
+            <div className="flex items-center justify-between border-b border-[#ebdccd] pb-2">
+              <h2 className="text-xs font-mono uppercase tracking-wider font-bold text-[#716358]">
                 Penebusan Resep Aktif
               </h2>
               <button
                 onClick={() => setActivePrescription(null)}
-                className="text-xs text-neutral-500 hover:text-neutral-900 underline"
+                className="rounded-full border border-[#ebdccd] bg-white px-3 py-1 text-xs text-[#716358] hover:text-[#241a14] hover:bg-[#f5ece1] transition"
               >
                 Tutup Lembar Ini
               </button>
@@ -105,7 +105,7 @@ export default function PharmacyPage() {
 
         {/* 3. Pharmacy Stock & History Inventory Manager */}
         <div className="space-y-3 pt-4">
-          <div className="text-xs font-mono uppercase tracking-wider text-neutral-400">
+          <div className="text-xs font-mono uppercase tracking-wider font-bold text-[#716358]">
             Manajemen Stok &amp; Riwayat Penebusan
           </div>
 
