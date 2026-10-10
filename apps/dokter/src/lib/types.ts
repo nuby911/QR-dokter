@@ -42,6 +42,8 @@ export interface DoctorProfile {
   name: string;
   sip: string;
   faskes: string;
+  address?: string;
+  phone?: string;
   privateKey: string; // Hex string
   publicKey: string;  // Hex string
 }

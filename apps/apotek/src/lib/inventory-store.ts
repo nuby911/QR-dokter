@@ -1,15 +1,52 @@
-import type { PharmacyItem, DispenseLog } from './types';
+import type { PharmacyItem, DispenseLog, PharmacyProfile } from './types';
 import { DEMO_INVENTORY } from './demo-data';
 
+const PHARMACY_PROFILE_KEY = 'mediqr_pharmacy_profile_v1';
 const INVENTORY_STORAGE_KEY = 'mediqr_pharmacy_inventory_v1';
 const DISPENSE_STORAGE_KEY = 'mediqr_dispense_history_v1';
 
 // In-memory fallback for SSR and testing environments
-let memoryInventory: PharmacyItem[] = JSON.parse(JSON.stringify(DEMO_INVENTORY));
+let memoryPharmacyProfile: PharmacyProfile | null = null;
+let memoryInventory: PharmacyItem[] = [];
 let memoryDispenseLogs: DispenseLog[] = [];
 
 function isBrowser(): boolean {
   return typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';
+}
+
+export function getPharmacyProfile(): PharmacyProfile | null {
+  if (!isBrowser()) return memoryPharmacyProfile;
+  try {
+    const raw = window.localStorage.getItem(PHARMACY_PROFILE_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch {
+    return memoryPharmacyProfile;
+  }
+}
+
+export function savePharmacyProfile(profile: PharmacyProfile): void {
+  if (!isBrowser()) {
+    memoryPharmacyProfile = profile;
+    return;
+  }
+  try {
+    window.localStorage.setItem(PHARMACY_PROFILE_KEY, JSON.stringify(profile));
+    memoryPharmacyProfile = profile;
+  } catch (err) {
+    console.error('Failed to save pharmacy profile:', err);
+  }
+}
+
+export function clearPharmacyProfile(): void {
+  memoryPharmacyProfile = null;
+  if (isBrowser()) {
+    try {
+      window.localStorage.removeItem(PHARMACY_PROFILE_KEY);
+    } catch {
+      // ignore
+    }
+  }
 }
 
 function loadInventoryFromStorage(): PharmacyItem[] {
@@ -17,8 +54,8 @@ function loadInventoryFromStorage(): PharmacyItem[] {
   try {
     const raw = window.localStorage.getItem(INVENTORY_STORAGE_KEY);
     if (!raw) {
-      window.localStorage.setItem(INVENTORY_STORAGE_KEY, JSON.stringify(DEMO_INVENTORY));
-      return JSON.parse(JSON.stringify(DEMO_INVENTORY));
+      // Clean default empty inventory
+      return [];
     }
     return JSON.parse(raw);
   } catch {
@@ -164,6 +201,31 @@ export function resetToDemoData(): void {
   if (isBrowser()) {
     try {
       window.localStorage.setItem(INVENTORY_STORAGE_KEY, JSON.stringify(fresh));
+      window.localStorage.removeItem(DISPENSE_STORAGE_KEY);
+    } catch {
+      // ignore
+    }
+  }
+}
+
+/**
+ * Seeds inventory with demo catalog items.
+ */
+export function seedDemoInventory(): void {
+  const fresh = JSON.parse(JSON.stringify(DEMO_INVENTORY));
+  memoryInventory = fresh;
+  saveInventoryToStorage(fresh);
+}
+
+/**
+ * Clears all items in inventory and dispense history.
+ */
+export function clearInventory(): void {
+  memoryInventory = [];
+  memoryDispenseLogs = [];
+  if (isBrowser()) {
+    try {
+      window.localStorage.setItem(INVENTORY_STORAGE_KEY, JSON.stringify([]));
       window.localStorage.removeItem(DISPENSE_STORAGE_KEY);
     } catch {
       // ignore

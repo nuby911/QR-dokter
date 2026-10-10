@@ -11,34 +11,35 @@ import {
 import type { PrescriptionPayload, PrescriptionItem, DoctorProfile } from '../../lib/types';
 import { DEMO_DOCTOR, DEMO_PRESCRIPTION_TEMPLATES } from '../../lib/demo-data';
 import { signPrescription, generateDoctorKeyPair } from '../../lib/crypto';
+import { saveDoctorProfile } from '../../lib/doctor-store';
 
 interface PrescriptionFormProps {
   onPrescriptionGenerated: (payload: PrescriptionPayload, baseUrl: string) => void;
   baseUrl: string;
   onBaseUrlChange: (url: string) => void;
+  doctor: DoctorProfile;
+  onEditDoctorProfile?: () => void;
+  onDoctorUpdated?: (doctor: DoctorProfile) => void;
 }
 
 export default function PrescriptionForm({
   onPrescriptionGenerated,
   baseUrl,
   onBaseUrlChange,
+  doctor,
+  onEditDoctorProfile,
+  onDoctorUpdated,
 }: PrescriptionFormProps) {
-  const [doctor, setDoctor] = useState<DoctorProfile>(DEMO_DOCTOR);
-  const [patientName, setPatientName] = useState<string>('Budi Santoso');
-  const [patientAge, setPatientAge] = useState<number>(32);
+  const [patientName, setPatientName] = useState<string>('');
+  const [patientAge, setPatientAge] = useState<number | ''>('');
   const [patientGender, setPatientGender] = useState<'L' | 'P'>('L');
-  const [patientPhone, setPatientPhone] = useState<string>('081298765432');
+  const [patientPhone, setPatientPhone] = useState<string>('');
 
   const [items, setItems] = useState<PrescriptionItem[]>([
     {
-      n: 'Paracetamol 500mg',
-      q: 10,
-      s: '3x1 tablet sesudah makan',
-    },
-    {
-      n: 'Cetirizine 10mg',
-      q: 5,
-      s: '1x1 tablet malam hari',
+      n: '',
+      q: 1,
+      s: '',
     },
   ]);
 
@@ -91,12 +92,18 @@ export default function PrescriptionForm({
   };
 
   const handleGenerateKeys = async () => {
-    const pair = await generateDoctorKeyPair();
-    setDoctor((prev) => ({
-      ...prev,
-      privateKey: pair.privateKey,
-      publicKey: pair.publicKey,
-    }));
+    if (confirm('Apakah Anda yakin ingin memperbarui pasangan Kunci Digital Ed25519 dokter ini?')) {
+      const pair = await generateDoctorKeyPair();
+      const updated: DoctorProfile = {
+        ...doctor,
+        privateKey: pair.privateKey,
+        publicKey: pair.publicKey,
+      };
+      saveDoctorProfile(updated);
+      if (onDoctorUpdated) {
+        onDoctorUpdated(updated);
+      }
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -165,14 +172,25 @@ export default function PrescriptionForm({
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setShowKeyModal(!showKeyModal)}
-            className="inline-flex items-center gap-1.5 rounded-full border border-[#ebdccd] bg-[#fbfbf8] px-3 py-1.5 text-xs font-medium text-[#241a14] hover:bg-[#f5ece1] transition w-fit"
-          >
-            <Key className="h-3.5 w-3.5 text-[#e86a28]" />
-            <span>Kunci Ed25519</span>
-          </button>
+          <div className="flex items-center gap-2">
+            {onEditDoctorProfile && (
+              <button
+                type="button"
+                onClick={onEditDoctorProfile}
+                className="inline-flex items-center gap-1.5 rounded-full border border-[#ebdccd] bg-[#fbfbf8] px-3 py-1.5 text-xs font-medium text-[#241a14] hover:bg-[#f5ece1] transition w-fit"
+              >
+                <span>⚙️ Profil Dokter</span>
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={() => setShowKeyModal(!showKeyModal)}
+              className="inline-flex items-center gap-1.5 rounded-full border border-[#ebdccd] bg-[#fbfbf8] px-3 py-1.5 text-xs font-medium text-[#241a14] hover:bg-[#f5ece1] transition w-fit"
+            >
+              <Key className="h-3.5 w-3.5 text-[#e86a28]" />
+              <span>Kunci Ed25519</span>
+            </button>
+          </div>
         </div>
 
         {/* QR Base URL Configuration */}

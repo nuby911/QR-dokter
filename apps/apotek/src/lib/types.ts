@@ -46,6 +46,14 @@ export interface DoctorProfile {
   publicKey: string;  // Hex string
 }
 
+export interface PharmacyProfile {
+  name: string;
+  sia: string;
+  pharmacist: string;
+  address: string;
+  phone?: string;
+}
+
 export interface PharmacyItem {
   id: string;
   barcode?: string;
